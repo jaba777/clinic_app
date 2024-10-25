@@ -1,0 +1,56 @@
+<section
+  class="authorization"
+  *ngIf="authScreenService.isSignin"
+  (click)="onAuthorizationClick($event)"
+>
+  <div class="sign-in" *ngIf="authScreenService.isSignin">
+    <form [formGroup]="signInForm" class="sign-in-form">
+      <h1>ავტორიზაცია</h1>
+      <div>
+        <div class="input-box">
+          <label for="email-sign-in">მეილი:</label>
+          <input id="email-sign-in" formControlName="email" />
+        </div>
+        <div
+          *ngIf="
+            signInForm.get('email').invalid && signInForm.get('email').touched
+          "
+        >
+          <small *ngIf="signInForm.get('email').hasError('required')"
+            >შეავსეთ მეილი</small
+          >
+          <small *ngIf="signInForm.get('email').hasError('email')"
+            >შეიყვანეთ ვალიდური მეილი</small
+          >
+        </div>
+      </div>
+
+      <div>
+        <div class="input-box">
+          <label for="password-sign-in">პაროლი:</label>
+          <input
+            id="password-sign-in"
+            formControlName="password"
+            type="password"
+          />
+        </div>
+        <div
+          *ngIf="
+            signInForm.get('password').invalid &&
+            signInForm.get('password').touched
+          "
+        >
+          <small *ngIf="signInForm.get('password').hasError('required')"
+            >შეიყვანეთ პაროლი</small
+          >
+          <small *ngIf="signInForm.get('password').hasError('pattern')"
+            >პაროლი უნდა იყოს მინიმუმ 8 ასოსგან შემდგარი,უნდა შეიცავდეს დიდ და
+            პატარა ასოს და სიმბოლოს</small
+          >
+        </div>
+      </div>
+      <div class="forget-password"><span>პაროლის აღდგენა</span></div>
+      <div class="sign-in-btn"><button type="submit">შესვლა</button></div>
+    </form>
+  </div>
+</section>
