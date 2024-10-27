@@ -12,4 +12,15 @@ export class AuthService {
   SignUp(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/Auth/sign-up`, data);
   }
+
+  DoctorSignUp(data: any, userId: number | string): Observable<any> {
+    return this.http.post(
+      `${this.baseUrl}/api/Auth/sign-up-doctor?userId=${userId}`,
+      data
+    );
+  }
+
+  SignIn(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/Auth/sign-in`, data);
+  }
 }

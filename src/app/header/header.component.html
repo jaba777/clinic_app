@@ -1,8 +1,10 @@
 <header>
   <div class="header-container">
     <div class="logo">
-      <img src="/Images/Logo.png" alt="" />
-      <span>კლინიკა</span>
+      <a routerLink="/home">
+        <img src="/Images/Logo.png" alt="" />
+        <span>კლინიკა</span>
+      </a>
     </div>
     <div class="header-box">
       <ul>
@@ -31,8 +33,13 @@
         <li>
           <a routerLink="/contact" routerLinkActive="active-link">კონტაქტი</a>
         </li>
+        <li *ngIf="profile.role === 'admin'">
+          <a routerLink="/doctor-register" routerLinkActive="active-link"
+            >ექიმის რეგისტრაცია</a
+          >
+        </li>
       </ul>
-      <ul>
+      <ul *ngIf="profile.name == null">
         <li>
           <a (click)="authScreenService.addSignScreen()" style="cursor: pointer"
             >აუტორიზაცია</a
@@ -43,6 +50,14 @@
           <a routerLink="/sign-up" routerLinkActive="active-link"
             >რეგისტრაცია</a
           >
+        </li>
+      </ul>
+      <ul *ngIf="profile.name != null" class="profile">
+        <li>
+          {{ profile.name }}
+        </li>
+        <li *ngIf="profile.photo == null">
+          <img src="/Images/Profile.png" alt="" />
         </li>
       </ul>
     </div>
@@ -57,8 +72,33 @@
       <span>იაკობ ნიკოლაძე №10</span>
     </div>
     <div class="inputs">
-      <input type="text" placeholder="მოძებნე ექიმი სახელით" />
-      <input type="text" placeholder="მოძებნე სპეციალობით" />
+      <div class="input-box">
+        <input type="text" placeholder="მოძებნე ექიმი სახელით" />
+      </div>
+      <div class="input-box">
+        <mat-form-field appearance="fill" class="hide-ripple">
+          <input
+            type="text"
+            matInput
+            [formControl]="myControl"
+            [matAutocomplete]="auto"
+          />
+
+          <mat-autocomplete
+            #auto="matAutocomplete"
+            (optionSelected)="onOptionSelected($event)"
+            (onscroll)="onScroll($event)"
+            class="math-autocomplete"
+          >
+            <mat-option
+              *ngFor="let option of filteredOptions | async"
+              [value]="option"
+            >
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
     </div>
     <div class="search-button">
       <button>

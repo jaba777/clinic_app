@@ -8,15 +8,18 @@ header {
     align-items: center;
     justify-content: space-around;
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      img {
-        width: 70px;
-      }
-      span {
-        color: #ff2c52;
-        font-weight: 700;
+      a {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        text-decoration: none;
+        img {
+          width: 70px;
+        }
+        span {
+          color: #ff2c52;
+          font-weight: 700;
+        }
       }
     }
     .header-box {
@@ -51,6 +54,20 @@ header {
           }
         }
       }
+      .profile {
+        display: flex;
+        align-items: center;
+        li {
+          img {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+          }
+          &::before {
+            display: none;
+          }
+        }
+      }
     }
     .active-link {
       font-weight: 700;
@@ -79,11 +96,42 @@ header {
     .inputs {
       display: flex;
       gap: 0.5rem;
-      input {
-        border: 1px solid rgb(75, 170, 194);
-        outline: none;
-        border-radius: 1rem;
-        padding: 0.6rem 0.8rem;
+      .input-box {
+        position: relative;
+        width: 300px;
+        input {
+          border: 1px solid rgb(75, 170, 194);
+          outline: none;
+          border-radius: 1rem;
+          padding: 0.6rem 0.8rem;
+          width: 100%;
+        }
+
+        .hide-ripple {
+          position: relative;
+          width: 400px;
+          overflow-x: hidden;
+
+          .mdc-line-ripple {
+            display: none !important;
+            &::before,
+            &::after {
+              border-bottom-color: red !important;
+            }
+          }
+
+          .mat-mdc-input-element {
+            border: 1px solid rgb(75, 170, 194) !important;
+            outline: none;
+            border-radius: 1rem;
+            padding: 0.4rem 0.8rem;
+            width: 90%;
+          }
+
+          div.mat-mdc-autocomplete-panel {
+            background: #052338 !important;
+          }
+        }
       }
     }
     .search-button {
@@ -99,4 +147,8 @@ header {
       }
     }
   }
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #052338;
 }

@@ -1,0 +1,24 @@
+<div class="home-container">
+  <div class="background-container">
+    <div class="background-box">
+      <div class="background-text">
+        <h2>აირჩიე კლინიკა რომელსაც შეგიძლია ენდო</h2>
+        <div class="address">
+          <img src="/Icons/location.svg" alt="" />
+          <span>იაკობ ნიკოლაძე №10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="doctors">
+    <div class="categories-container">
+      <h2>კატეგორიები</h2>
+      <ul>
+        <li *ngFor="let category of doctorCategories">
+          ( {{ category.user_count }} ) <span>{{ category.name }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

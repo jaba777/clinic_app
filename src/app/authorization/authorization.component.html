@@ -4,12 +4,16 @@
   (click)="onAuthorizationClick($event)"
 >
   <div class="sign-in" *ngIf="authScreenService.isSignin">
-    <form [formGroup]="signInForm" class="sign-in-form">
+    <form
+      [formGroup]="signInForm"
+      class="sign-in-form"
+      (ngSubmit)="SignInFunct()"
+    >
       <h1>ავტორიზაცია</h1>
       <div>
         <div class="input-box">
           <label for="email-sign-in">მეილი:</label>
-          <input id="email-sign-in" formControlName="email" />
+          <input id="email-sign-in" formControlName="email" type="email" />
         </div>
         <div
           *ngIf="

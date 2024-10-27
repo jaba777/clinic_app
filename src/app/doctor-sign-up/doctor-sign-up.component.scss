@@ -1,0 +1,85 @@
+.sign-up {
+  width: 1500px;
+  max-width: 100%;
+  margin: 8rem auto;
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 2rem;
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+      .input-box {
+        display: flex;
+        flex-direction: column;
+        input {
+          outline: none;
+          border: 1px solid rgb(75, 170, 194);
+          border-radius: 1rem;
+          padding: 0.6rem 0.4rem;
+          width: 300px;
+        }
+        .file_input::-webkit-file-upload-button {
+          visibility: hidden;
+        }
+        label {
+          color: #053354;
+          font-size: 15px;
+          font-weight: 600;
+        }
+      }
+      .hide-ripple {
+        position: relative;
+        width: 300px;
+        overflow-x: hidden;
+
+        .mdc-line-ripple {
+          display: none !important;
+          &::before,
+          &::after {
+            border-bottom-color: red !important;
+          }
+        }
+
+        .mat-mdc-input-element {
+          border: 1px solid rgb(75, 170, 194) !important;
+          outline: none;
+          border-radius: 1rem;
+          padding: 0.4rem 0.8rem;
+          width: 90%;
+        }
+
+        div.mat-mdc-autocomplete-panel {
+          background: #052338 !important;
+        }
+      }
+      div {
+        small {
+          color: red;
+          font-weight: 600;
+          font-size: 13px;
+        }
+      }
+    }
+    .register-button {
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      button {
+        position: absolute;
+        right: 20px;
+        width: 200px;
+        margin: 0 auto 0 0;
+        border: none;
+        background: #053354;
+        padding: 0.5rem 0.8rem;
+        border-radius: 10px;
+        cursor: pointer;
+        color: #fff;
+      }
+    }
+  }
+}

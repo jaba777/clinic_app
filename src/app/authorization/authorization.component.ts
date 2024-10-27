@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthScreenService } from '../Services/auth-screen.service';
 import { LocalService } from '../Services/localService.service';
+import { AuthService } from '../Services/authService.service';
+import { CookieServiceService } from '../Services/cookie-service.service';
 
 @Component({
   selector: 'app-authorization',
@@ -14,7 +16,9 @@ export class AuthorizationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     public authScreenService: AuthScreenService,
-    private localService: LocalService
+    private localService: LocalService,
+    private authService: AuthService,
+    private cookieServiceService: CookieServiceService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +46,19 @@ export class AuthorizationComponent implements OnInit {
 
     if (target === currentTarget) {
       this.authScreenService.removeSignScreen();
+    }
+  }
+
+  SignInFunct() {
+    if (this.signInForm.valid) {
+      // If valid, make the sign-in request
+      this.authService.SignIn(this.signInForm.value).subscribe((response) => {
+        console.log(response);
+        this.cookieServiceService.setCookie('token', response.token);
+        this.cookieServiceService.setCookie('userId', response.userId);
+        this.cookieServiceService.setCookie('role', response.role);
+        this.authScreenService.removeSignScreen();
+      });
     }
   }
 }
