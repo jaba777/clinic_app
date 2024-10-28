@@ -21,4 +21,13 @@ export class UserServiceService {
     }
     return of(null);
   }
+
+  FindDoctors(categoryId: number | null, page: number): Observable<any> {
+    if (categoryId && page) {
+      return this.http.get(
+        `${this.baseUrl}/api/Users/get-doctors?categoryId=${categoryId}&page=${page}`
+      );
+    }
+    return of(null);
+  }
 }

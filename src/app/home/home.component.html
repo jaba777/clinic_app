@@ -15,10 +15,39 @@
     <div class="categories-container">
       <h2>კატეგორიები</h2>
       <ul>
-        <li *ngFor="let category of doctorCategories">
-          ( {{ category.user_count }} ) <span>{{ category.name }}</span>
+        <li
+          *ngFor="let category of doctorCategories; let i = index"
+          (click)="getCategory(category, i)"
+        >
+          <span
+            class="count"
+            [ngStyle]="
+              categoryIndex == i ? { fontWeight: 700 } : { fontWeight: 100 }
+            "
+          >
+            ( {{ category.user_count }} ) </span
+          ><span>{{ category.name }}</span>
         </li>
       </ul>
+    </div>
+    <div class="get-doctors" *ngFor="let doctor of dictors">
+      <div class="get-doctors-box">
+        <div class="images">
+          <img [src]="'data:image/jpeg;base64,' + doctor.photo" alt="" />
+        </div>
+        <div class="desc">
+          <h3>
+            <span>{{ doctor.name }}</span> <span>{{ doctor.surname }}</span>
+          </h3>
+          <p>{{ profession }}</p>
+          <div class="icons">
+            <img src="Icons/Vector.svg" alt="" />
+            <img src="Icons/Vector.svg" alt="" />
+            <img src="Icons/Vector.svg" alt="" />
+          </div>
+          <a routerLink="/user-profile">მიღებაზე ჩაწერა</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

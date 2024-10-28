@@ -152,6 +152,10 @@
       <button type="submit">რეგისტრაცია</button>
     </div>
   </form>
+  <div *ngIf="isLoading">
+    <app-spinner></app-spinner>
+  </div>
+
   <span *ngIf="message !== null" style="color: red">
     {{ message }}
   </span>

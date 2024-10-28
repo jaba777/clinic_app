@@ -102,7 +102,7 @@ export class DoctorSignUpComponent implements OnInit {
     this.myControl.setValue(selectedOption.name);
   }
 
-  loading: boolean = false;
+  loading: boolean = true;
 
   onFileSelected(event: Event, type: 'photo' | 'resume') {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -129,12 +129,12 @@ export class DoctorSignUpComponent implements OnInit {
     if (this.selectedPhoto) formData.append('photo', this.selectedPhoto);
     if (this.selectedResume) formData.append('resume', this.selectedResume);
 
-    if (this.signUpForm.valid || this.selectedPhoto || this.selectedResume) {
+    if (this.signUpForm.valid && this.selectedPhoto && this.selectedResume) {
       this.authService
         .DoctorSignUp(formData, this.userId)
         .subscribe((response) => {
           this.message = response.message;
-          console.log('result', response);
+          this.loading = false;
         });
       console.log('saff', this.signUpForm.value);
     }

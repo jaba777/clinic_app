@@ -6,9 +6,10 @@ import { DoctorSignUpRoutingModule } from './doctor-sign-up-routing.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { SpinnerComponent } from '../spinner/spinner.component';
 
 @NgModule({
-  declarations: [DoctorSignUpComponent],
+  declarations: [DoctorSignUpComponent, SpinnerComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,

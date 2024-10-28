@@ -70,8 +70,61 @@
           color: #053354;
           font-size: 15px;
           cursor: pointer;
+          .count {
+            font-weight: 100;
+          }
           span {
             font-weight: 700;
+          }
+        }
+      }
+    }
+    .get-doctors {
+      grid-template-columns: repeat(3, 12px);
+      grid-template-rows: repeat(3, auto);
+      grid-gap: 5px;
+      .get-doctors-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 300px;
+        max-width: 100%;
+        padding: 10px;
+        .images {
+          img {
+            width: 140px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 50%;
+          }
+        }
+        .desc {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          h3 {
+            color: #053354;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+          }
+          p {
+            text-align: center;
+          }
+          .icons {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+          }
+          a {
+            text-decoration: none;
+            color: #053354;
+            margin-top: 5px;
           }
         }
       }
