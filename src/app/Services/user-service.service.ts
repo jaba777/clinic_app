@@ -11,8 +11,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class UserServiceService {
   private baseUrl = environment.apiUrl;
   constructor(private http: HttpClient, private cookieService: CookieService) {}
-  userId: any = null;
-
+  myUser: any = {};
   MyProfile(userId: any): Observable<any> {
     if (userId) {
       return this.http.get(

@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
     private categoryServiceService: CategoryServiceService,
     private userServiceService: UserServiceService
   ) {}
+  totalItems = 1;
 
   profession: string | null = null;
   categoryIndex: number = 0;
@@ -44,12 +45,13 @@ export class HomeComponent implements OnInit {
             if (categoryId !== null) {
               return this.userServiceService.FindDoctors(categoryId, page);
             }
-            return []; // Handle if categoryId is null
+            return [];
           })
         )
         .subscribe((doctorResponse) => {
           console.log('Doctor Response:', doctorResponse.my_profile);
           this.dictors = doctorResponse.my_profile;
+          this.totalItems = doctorResponse.totalPages;
         });
     }
   }
@@ -59,5 +61,12 @@ export class HomeComponent implements OnInit {
     console.log(category);
     this.profession = category.name as string;
     this.categoryIndex = index;
+  }
+
+  currentPage = 1;
+
+  pageChanged(event: any) {
+    this.pageSubject.next(event.pageIndex + 1);
+    this.currentPage = event.pageIndex + 1;
   }
 }

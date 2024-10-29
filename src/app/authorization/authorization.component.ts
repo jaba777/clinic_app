@@ -4,6 +4,8 @@ import { AuthScreenService } from '../Services/auth-screen.service';
 import { LocalService } from '../Services/localService.service';
 import { AuthService } from '../Services/authService.service';
 import { CookieServiceService } from '../Services/cookie-service.service';
+import { UserServiceService } from '../Services/user-service.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-authorization',
@@ -18,7 +20,9 @@ export class AuthorizationComponent implements OnInit {
     public authScreenService: AuthScreenService,
     private localService: LocalService,
     private authService: AuthService,
-    private cookieServiceService: CookieServiceService
+    private cookieServiceService: CookieServiceService,
+    private userServiceService: UserServiceService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -55,9 +59,11 @@ export class AuthorizationComponent implements OnInit {
       this.authService.SignIn(this.signInForm.value).subscribe((response) => {
         console.log(response);
         this.cookieServiceService.setCookie('token', response.token);
-        this.cookieServiceService.setCookie('userId', response.userId);
-        this.cookieServiceService.setCookie('role', response.role);
+        this.cookieServiceService.setCookie('userId', response.user.id);
+        this.cookieServiceService.setCookie('role', response.user.role);
+        this.userServiceService.myUser = response.user;
         this.authScreenService.removeSignScreen();
+        this.router.navigate(['/home']);
       });
     }
   }

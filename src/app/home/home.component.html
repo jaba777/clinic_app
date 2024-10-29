@@ -30,8 +30,8 @@
         </li>
       </ul>
     </div>
-    <div class="get-doctors" *ngFor="let doctor of dictors">
-      <div class="get-doctors-box">
+    <div class="get-doctors">
+      <div class="get-doctors-box" *ngFor="let doctor of dictors">
         <div class="images">
           <img [src]="'data:image/jpeg;base64,' + doctor.photo" alt="" />
         </div>
@@ -51,3 +51,10 @@
     </div>
   </div>
 </div>
+
+<mat-paginator
+  [length]="totalItems * 6"
+  [pageSize]="6"
+  [pageIndex]="currentPage - 1"
+  (page)="pageChanged($event)"
+></mat-paginator>

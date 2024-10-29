@@ -26,4 +26,11 @@ export class CookieServiceService implements OnInit {
   getCookie(name: string) {
     return this.cookieService.get(name);
   }
+  removeCookieAll(): void {
+    this.user = {
+      name: '',
+      userId: null,
+    };
+    this.cookieService.deleteAll();
+  }
 }

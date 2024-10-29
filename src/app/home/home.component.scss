@@ -80,9 +80,11 @@
       }
     }
     .get-doctors {
-      grid-template-columns: repeat(3, 12px);
-      grid-template-rows: repeat(3, auto);
-      grid-gap: 5px;
+      display: flex;
+      flex-wrap: wrap;
+      width: 80%;
+      align-items: flex-start;
+
       .get-doctors-box {
         display: flex;
         flex-direction: column;

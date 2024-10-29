@@ -33,13 +33,13 @@
         <li>
           <a routerLink="/contact" routerLinkActive="active-link">კონტაქტი</a>
         </li>
-        <li *ngIf="profile.role === 'admin'">
+        <li *ngIf="this.userServiceService.myUser.role === 'admin'">
           <a routerLink="/doctor-register" routerLinkActive="active-link"
             >ექიმის რეგისტრაცია</a
           >
         </li>
       </ul>
-      <ul *ngIf="profile.name == null">
+      <ul *ngIf="this.userServiceService.myUser.name == null">
         <li>
           <a (click)="authScreenService.addSignScreen()" style="cursor: pointer"
             >აუტორიზაცია</a
@@ -52,13 +52,14 @@
           >
         </li>
       </ul>
-      <ul *ngIf="profile.name != null" class="profile">
+      <ul *ngIf="this.userServiceService.myUser.name != null" class="profile">
         <li>
-          {{ profile.name }}
+          {{ this.userServiceService.myUser.name }}
         </li>
-        <li *ngIf="profile.photo == null">
+        <li *ngIf="this.userServiceService.myUser.photo == null">
           <img src="/Images/Profile.png" alt="" />
         </li>
+        <li><button (click)="SignOut()">Sign Out</button></li>
       </ul>
     </div>
   </div>
@@ -87,7 +88,6 @@
           <mat-autocomplete
             #auto="matAutocomplete"
             (optionSelected)="onOptionSelected($event)"
-            (onscroll)="onScroll($event)"
             class="math-autocomplete"
           >
             <mat-option

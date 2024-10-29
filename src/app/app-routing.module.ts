@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuardGuard } from './guards/admin-guard.guard';
+import { UserGuardGuard } from './guards/user-guard.guard';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,6 +21,12 @@ const routes: Routes = [
         (m) => m.DoctorSignUpModule
       ),
     canActivate: [AdminGuardGuard],
+  },
+  {
+    path: 'profile',
+    loadChildren: () =>
+      import('./profile/profile.module').then((m) => m.ProfileModule),
+    canActivate: [UserGuardGuard],
   },
 ];
 

@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
       console.log('userId', userId);
       if (userId) {
         this.userServiceService.MyProfile(userId).subscribe((response) => {
-          this.profile = response.my_profile;
+          this.userServiceService.myUser = response.my_profile;
           console.log('my_profile', response.my_profile);
         });
       }
@@ -73,8 +73,9 @@ export class HeaderComponent implements OnInit {
     const selectedOption = event.option.value;
     this.myControl.setValue(selectedOption.name);
   }
-  onScroll(event: Event) {
-    const target = event.target as HTMLElement;
-    console.log('event', target);
+
+  SignOut() {
+    this.cookieServiceService.removeCookieAll();
+    this.userServiceService.myUser = {};
   }
 }
