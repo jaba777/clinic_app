@@ -21,6 +21,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { HomeModule } from './home/home.module';
 import { DoctorSignUpModule } from './doctor-sign-up/doctor-sign-up.module';
 import { ProfileModule } from './profile/profile.module';
+import { UsersModule } from './users/users.module';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ProfileModule } from './profile/profile.module';
     SignUpModule,
     DoctorSignUpModule,
     ProfileModule,
+    UsersModule,
   ],
   providers: [
     provideClientHydration(),

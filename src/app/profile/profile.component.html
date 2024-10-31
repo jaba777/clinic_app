@@ -1,3 +1,61 @@
 <div class="my-profile">
-  <div class="my-info"></div>
+  <div class="my-info">
+    <div class="image">
+      <img
+        src="/Images/Profile.png"
+        alt=""
+        *ngIf="userServiceService.myUser.photo == null"
+      />
+    </div>
+    <div class="user-info">
+      <h4 *ngIf="userServiceService.myUser.role == 'user'">მომხმარებელი</h4>
+      <ul>
+        <li>
+          <span>პირადი ნომერი :</span
+          ><span>{{ userServiceService.myUser.private_number }}</span>
+        </li>
+        <li>
+          <span>Email :</span><span>{{ userServiceService.myUser.email }}</span>
+        </li>
+        <li><span>პაროლის შეცვლა</span></li>
+        <li><span>ჩემი ჯავშანი :</span><span>(1)</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="my-booking">
+    <h2>ჩემი ჯავშანი <span>( 2 )</span></h2>
+    <div class="dates">
+      <p>{{ thisYear }}</p>
+      <p>{{ getMonth }}</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="direction">
+            <span class="left" (click)="LowWeekIndex()">
+              <img src="Icons/Left.svg" alt="" />
+            </span>
+            <span class="left" (click)="growWeekIndex()">
+              <img src="Icons/Right.svg" alt="" />
+            </span>
+          </th>
+
+          <th *ngFor="let col of weeks">
+            <span>{{ col.day }}</span> ({{ col.week }})
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of time">
+          <td>{{ row }}</td>
+          <td *ngFor="let col of weeks">
+            <div
+              *ngIf="col.week === 'Sat' || col.week == 'Sun'"
+              class="block"
+            ></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

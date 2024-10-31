@@ -28,6 +28,11 @@ const routes: Routes = [
       import('./profile/profile.module').then((m) => m.ProfileModule),
     canActivate: [UserGuardGuard],
   },
+  {
+    path: 'user/:id',
+    loadChildren: () =>
+      import('./users/users.module').then((m) => m.UsersModule),
+  },
 ];
 
 @NgModule({
