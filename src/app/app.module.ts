@@ -22,6 +22,7 @@ import { HomeModule } from './home/home.module';
 import { DoctorSignUpModule } from './doctor-sign-up/doctor-sign-up.module';
 import { ProfileModule } from './profile/profile.module';
 import { UsersModule } from './users/users.module';
+import { DoctorsModule } from './doctors/doctors.module';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { UsersModule } from './users/users.module';
     DoctorSignUpModule,
     ProfileModule,
     UsersModule,
+    DoctorsModule,
   ],
   providers: [
     provideClientHydration(),

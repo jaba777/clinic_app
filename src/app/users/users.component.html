@@ -1,1 +1,107 @@
-<p>users works!</p>
+<div class="my-profile">
+  <div class="my-info">
+    <div class="image">
+      <img src="/Images/Profile.png" alt="" *ngIf="user?.photo == null" />
+      <img
+        [src]="'data:image/jpeg;base64,' + user.photo"
+        alt=""
+        *ngIf="user.photo !== null || user.photo !== undefined"
+      />
+    </div>
+    <div class="user-info">
+      <h4 *ngIf="user.role == 'doctor'">ექიმი</h4>
+      <ul>
+        <li>
+          <span style="color: aqua">{{ user.name }} {{ user.surname }}</span>
+        </li>
+        <li>
+          <span>Email :</span><span>{{ user.email }}</span>
+        </li>
+        <li><span>პაროლის შეცვლა</span></li>
+        <li><span>ჩემი ჯავშანი :</span><span>(1)</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="my-booking">
+    <h2>ჩემი ჯავშანი <span>( 2 )</span></h2>
+    <div class="dates">
+      <p>{{ thisYear }}</p>
+      <p>{{ getMonth }}</p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th class="direction">
+            <span class="left" (click)="LowWeekIndex()">
+              <img src="Icons/Left.svg" alt="" />
+            </span>
+            <span class="left" (click)="growWeekIndex()">
+              <img src="Icons/Right.svg" alt="" />
+            </span>
+          </th>
+
+          <th *ngFor="let col of weeks">
+            <span>{{ col.day }}</span> ({{ col.week }})
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of time">
+          <td>{{ row }}</td>
+          <td *ngFor="let col of weeks">
+            <div
+              *ngIf="col.week === 'Sat' || col.week == 'Sun'"
+              class="block"
+            ></div>
+            <div *ngIf="isDayBooked(col.day, row)" class="my-booked">
+              <img
+                src="Icons/remove.svg"
+                alt=""
+                (click)="getBookId(col.day, row)"
+              />
+              <span>ჩემი ჯავშანი</span>
+            </div>
+            <div
+              class="free-times"
+              *ngIf="
+                !isDayBooked(col.day, row) &&
+                col.week !== 'Sat' &&
+                col.week !== 'Sun'
+              "
+              (click)="getTimes(col, row)"
+            ></div>
+            <div
+              class="other-book"
+              *ngIf="
+                col.week !== 'Sat' &&
+                col.week !== 'Sun' &&
+                !isDayBooked(col.day, row) &&
+                isDayOtherBooked(col.day, row)
+              "
+            ></div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="booking-box" *ngIf="bookingScreen">
+    <div class="remove">
+      <img src="Icons/remove.svg" alt="" (click)="onbookingClick()" />
+    </div>
+
+    <div>
+      <p>გსურთ ვიზიტის დაჯავშნა?</p>
+    </div>
+    <button (click)="addBooking()">დაჯავშნა</button>
+  </div>
+
+  <div class="booking-remove" *ngIf="removeBookingScreen">
+    <div class="remove">
+      <img src="Icons/remove.svg" alt="" (click)="onRemoveBooking()" />
+    </div>
+    <div>
+      <p>გსურთ ჯავშნის წაშლა?</p>
+    </div>
+    <button (click)="removeBooking()">დიახ</button>
+  </div>
+</div>

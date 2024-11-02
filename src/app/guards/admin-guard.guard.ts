@@ -12,11 +12,10 @@ export class AdminGuardGuard implements CanActivate {
       userRole = this.cookieService.get('role');
     }
     const defaultPage = route.routeConfig?.path === 'home';
+    console.log('userRole', userRole);
 
     if (userRole == 'admin') {
-      if (route.routeConfig?.path === 'doctor-register') {
-        return true;
-      }
+      return true;
     } else {
       this.router.navigate(['/home']);
       return false;

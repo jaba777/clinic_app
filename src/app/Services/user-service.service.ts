@@ -29,4 +29,13 @@ export class UserServiceService {
     }
     return of(null);
   }
+
+  getDoctor(userId: string): Observable<any> {
+    if (userId) {
+      return this.http.get(
+        `${this.baseUrl}/api/Users/get-doctor?userId=${userId}`
+      );
+    }
+    return of(null);
+  }
 }

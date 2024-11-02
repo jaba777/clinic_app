@@ -33,6 +33,12 @@ const routes: Routes = [
     loadChildren: () =>
       import('./users/users.module').then((m) => m.UsersModule),
   },
+  {
+    path: 'doctors',
+    loadChildren: () =>
+      import('./doctors/doctors.module').then((m) => m.DoctorsModule),
+    canActivate: [AdminGuardGuard],
+  },
 ];
 
 @NgModule({

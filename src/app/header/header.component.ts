@@ -77,5 +77,6 @@ export class HeaderComponent implements OnInit {
   SignOut() {
     this.cookieServiceService.removeCookieAll();
     this.userServiceService.myUser = {};
+    window.location.reload();
   }
 }

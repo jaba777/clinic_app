@@ -1,0 +1,68 @@
+<div class="doctors">
+  <h2>კატეგორიები</h2>
+  <section>
+    <div class="categories-container">
+      <h3>კატეგორია</h3>
+      <ul>
+        <li
+          *ngFor="let category of doctorCategories; let i = index"
+          (click)="getCategory(category, i)"
+        >
+          <span
+            class="count"
+            [ngStyle]="
+              categoryIndex == i ? { fontWeight: 700 } : { fontWeight: 100 }
+            "
+          >
+            ( {{ category.user_count }} ) </span
+          ><span>{{ category.name }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="doctors-container">
+      <h3>სახელი</h3>
+      <ul>
+        <li *ngFor="let doctor of doctors">
+          <span> {{ doctor.name }} {{ doctor.surname }}</span>
+        </li>
+      </ul>
+    </div>
+    <div class="doctors-images">
+      <h3>ფოტოსურათი</h3>
+      <ul>
+        <li *ngFor="let doctor of doctors">
+          <img [src]="'data:image/jpeg;base64,' + doctor.photo" alt="" />
+        </li>
+      </ul>
+    </div>
+    <div class="doctors-ratings">
+      <h3>რეიტინგი</h3>
+      <ul>
+        <li *ngFor="let doctor of doctors">
+          <img src="Icons/Vector.svg" alt="" />
+          <img src="Icons/Vector.svg" alt="" />
+          <img src="Icons/Vector.svg" alt="" />
+        </li>
+      </ul>
+    </div>
+    <div class="edit-delete">
+      <ul>
+        <li *ngFor="let doctor of doctors">
+          <div class="edit">
+            <img src="Icons/edit.svg" alt="" />
+          </div>
+          <div class="delete">
+            <img src="Icons/delete.svg" alt="" />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+</div>
+
+<mat-paginator
+  [length]="totalItems * 6"
+  [pageSize]="6"
+  [pageIndex]="currentPage - 1"
+  (page)="pageChanged($event)"
+></mat-paginator>

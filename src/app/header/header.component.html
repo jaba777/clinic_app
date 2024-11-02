@@ -8,7 +8,7 @@
     </div>
     <div class="header-box">
       <ul>
-        <li>
+        <li *ngIf="this.userServiceService.myUser.role === 'admin'">
           <a routerLink="/doctors" routerLinkActive="active-link">ექიმები</a>
         </li>
         <li>
