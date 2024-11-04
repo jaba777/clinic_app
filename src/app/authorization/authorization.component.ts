@@ -24,6 +24,7 @@ export class AuthorizationComponent implements OnInit {
     private userServiceService: UserServiceService,
     private router: Router
   ) {}
+  isSpinner: boolean = false;
 
   ngOnInit(): void {
     this.signInForm = this.fb.group({
@@ -54,13 +55,14 @@ export class AuthorizationComponent implements OnInit {
   }
 
   SignInFunct() {
+    this.isSpinner = true;
     if (this.signInForm.valid) {
       // If valid, make the sign-in request
       this.authService.SignIn(this.signInForm.value).subscribe((response) => {
-        console.log(response);
         this.cookieServiceService.setCookie('token', response.token);
         this.cookieServiceService.setCookie('userId', response.user.id);
         this.cookieServiceService.setCookie('role', response.user.role);
+        this.isSpinner = false;
         this.userServiceService.myUser = response.user;
         this.authScreenService.removeSignScreen();
         this.router.navigate(['/home']);

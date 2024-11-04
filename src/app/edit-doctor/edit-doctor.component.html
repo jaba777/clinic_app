@@ -1,0 +1,157 @@
+<div class="sign-up">
+  <div class="doctor-photo">
+    <img
+      [src]="'data:image/jpeg;base64,' + photo"
+      alt=""
+      *ngIf="!photoPreview"
+    />
+    <img
+      [src]="photoPreview"
+      alt="Selected Photo Preview"
+      *ngIf="photoPreview"
+    />
+  </div>
+  <form [formGroup]="signUpForm" (ngSubmit)="EditProfile()">
+    <div>
+      <div class="input-box">
+        <label for="name">სახელი:</label>
+        <input id="name" formControlName="name" />
+      </div>
+
+      <div
+        *ngIf="signUpForm.get('name').invalid && signUpForm.get('name').touched"
+      >
+        <small *ngIf="signUpForm.get('name').hasError('required')"
+          >შეავსეთ სახელი</small
+        >
+        <small *ngIf="signUpForm.get('name').hasError('minlength')"
+          >სახელი უნდა შეიცავდეს მინიმუმ 5 სიმბოლოს</small
+        >
+      </div>
+    </div>
+    <div>
+      <div class="input-box">
+        <label for="surname">გვარი:</label>
+        <input id="surname" formControlName="surname" />
+      </div>
+      <div
+        *ngIf="
+          signUpForm.get('surname').invalid && signUpForm.get('surname').touched
+        "
+      >
+        <small *ngIf="signUpForm.get('surname').hasError('required')"
+          >შეავსეთ გვარი</small
+        >
+        <small *ngIf="signUpForm.get('surname').hasError('minLength')"
+          >გვარი უნდა შეიცავდეს მინიმუმ 5 სიმბოლოს</small
+        >
+      </div>
+    </div>
+    <div>
+      <div class="input-box">
+        <label for="email">მეილი:</label>
+        <input id="email" formControlName="email" />
+      </div>
+      <div
+        *ngIf="
+          signUpForm.get('email').invalid && signUpForm.get('email').touched
+        "
+      >
+        <small *ngIf="signUpForm.get('email').hasError('required')"
+          >შეავსეთ მეილი</small
+        >
+        <small *ngIf="signUpForm.get('email').hasError('email')"
+          >შეიყვანეთ ვალიდური მეილი</small
+        >
+      </div>
+    </div>
+    <div>
+      <div class="input-box">
+        <label for="private_number">პირადი ნომერი:</label>
+        <input id="private_number" formControlName="private_number" />
+      </div>
+      <div
+        *ngIf="
+          signUpForm.get('private_number').invalid &&
+          signUpForm.get('private_number').touched
+        "
+      >
+        <small *ngIf="signUpForm.get('private_number').hasError('required')"
+          >შეიყვანეთ პირადი ნომერი</small
+        >
+        <small *ngIf="signUpForm.get('private_number').hasError('minlength')">
+          პირადი ნომერი უნდა იყოს 11 ციფრიანი
+        </small>
+
+        <small *ngIf="signUpForm.get('private_number').hasError('maxlength')">
+          პირადი ნომერი უნდა იყოს 11 ციფრიანი
+        </small>
+      </div>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill" class="hide-ripple">
+        <input
+          type="text"
+          matInput
+          [formControl]="myControl"
+          [matAutocomplete]="auto"
+        />
+
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="onOptionSelected($event)"
+          class="math-autocomplete"
+        >
+          <mat-option
+            *ngFor="let option of filteredOptions | async"
+            [value]="option"
+          >
+            {{ option.name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div>
+      <div class="input-box">
+        <label for="photo">ფოტო:</label>
+        <input
+          id="photo"
+          type="file"
+          (change)="onFileSelected($event, 'photo')"
+          required
+          class="file_input"
+        />
+      </div>
+    </div>
+
+    <div>
+      <div class="input-box">
+        <label for="resume">რეზიუმე:</label>
+        <input
+          id="resume"
+          type="file"
+          (change)="onFileSelected($event, 'resume')"
+          required
+          class="file_input"
+        />
+      </div>
+    </div>
+
+    <div>
+      <div class="input-box">
+        <label for="password">პაროლი:</label>
+        <input id="password" formControlName="password" type="password" />
+      </div>
+    </div>
+
+    <div class="register-button">
+      <button type="submit">შეცვლა</button>
+    </div>
+  </form>
+
+  <span *ngIf="message !== null" style="color: red">
+    {{ message }}
+  </span>
+</div>

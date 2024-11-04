@@ -13,18 +13,19 @@ import {
 } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CookieServiceService } from '../Services/cookie-service.service';
+import { UserServiceService } from '../Services/user-service.service';
+import { ActivatedRoute } from '@angular/router';
 
 interface Option {
   id: number;
   name: string;
 }
-
 @Component({
-  selector: 'app-doctor-sign-up',
-  templateUrl: './doctor-sign-up.component.html',
-  styleUrl: './doctor-sign-up.component.scss',
+  selector: 'app-edit-doctor',
+  templateUrl: './edit-doctor.component.html',
+  styleUrl: './edit-doctor.component.scss',
 })
-export class DoctorSignUpComponent implements OnInit {
+export class EditDoctorComponent {
   signUpForm: any;
   localEmail: any = '';
   selectedPhoto: File | null = null;
@@ -42,7 +43,9 @@ export class DoctorSignUpComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private category: CategoryServiceService,
-    private cookieServiceService: CookieServiceService
+    private cookieServiceService: CookieServiceService,
+    private userServiceService: UserServiceService,
+    private route: ActivatedRoute
   ) {}
 
   otp: string = '';
@@ -50,6 +53,8 @@ export class DoctorSignUpComponent implements OnInit {
   categoryNumber: string | null = null;
   userId: any = null;
   message: string | null = null;
+  photo = '';
+  photoPreview: any = null;
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -64,19 +69,29 @@ export class DoctorSignUpComponent implements OnInit {
         ],
       ],
       email: ['', [Validators.required, Validators.email]],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(
-            '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,16}$'
-          ),
-        ],
-      ],
+      password: [''],
     });
+
+    const userId = this.route.snapshot.params['id'];
     if (typeof window != 'undefined') {
-      this.userId = this.cookieServiceService.getCookie('userId');
+      this.userId = userId;
       this.filterOptions();
+      this.userServiceService
+        .getDoctor(userId.toString())
+        .subscribe((response) => {
+          this.signUpForm.patchValue({
+            name: response.user.name,
+            surname: response.user.surname,
+            private_number: response.user.private_number,
+            email: response.user.email,
+          });
+
+          this.photo = response.user.photo;
+
+          const selectedOption = response.user.category;
+          this.categoryNumber = selectedOption.id.toString();
+          this.myControl.setValue(selectedOption.name);
+        });
     }
   }
 
@@ -106,14 +121,22 @@ export class DoctorSignUpComponent implements OnInit {
 
   onFileSelected(event: Event, type: 'photo' | 'resume') {
     const file = (event.target as HTMLInputElement).files?.[0];
+    console.log('event', (event.target as HTMLInputElement).files);
     if (file) {
-      type === 'photo'
-        ? (this.selectedPhoto = file)
-        : (this.selectedResume = file);
+      if (type === 'photo') {
+        this.selectedPhoto = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.photoPreview = e.target?.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.selectedResume = file;
+      }
     }
   }
 
-  signUp() {
+  EditProfile() {
     this.loading = true;
     const formData = new FormData();
     formData.append('name', this.signUpForm.get('name')?.value);
@@ -123,19 +146,21 @@ export class DoctorSignUpComponent implements OnInit {
       'private_number',
       this.signUpForm.get('private_number')?.value
     );
-    formData.append('password', this.signUpForm.get('password')?.value);
+    const password = this.signUpForm.get('password')?.value;
+    if (password !== null && password !== '') {
+      formData.append('password', password);
+    }
     if (this.categoryNumber)
       formData.append('category_id', this.categoryNumber);
     if (this.selectedPhoto) formData.append('photo', this.selectedPhoto);
     if (this.selectedResume) formData.append('resume', this.selectedResume);
 
-    if (this.signUpForm.valid && this.selectedPhoto && this.selectedResume) {
-      this.authService
-        .DoctorSignUp(formData, this.userId)
-        .subscribe((response) => {
-          this.message = response.message;
-          this.loading = false;
-        });
-    }
+    this.authService.DoctorEdit(formData, this.userId).subscribe((response) => {
+      this.message = response.message;
+      this.loading = false;
+      if (response.success !== true) {
+        window.location.reload();
+      }
+    });
   }
 }

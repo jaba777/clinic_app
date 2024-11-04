@@ -39,6 +39,14 @@ const routes: Routes = [
       import('./doctors/doctors.module').then((m) => m.DoctorsModule),
     canActivate: [AdminGuardGuard],
   },
+  {
+    path: 'edit-doctor/:id',
+    loadChildren: () =>
+      import('./edit-doctor/edit-doctor.module').then(
+        (m) => m.EditDoctorModule
+      ),
+    canActivate: [AdminGuardGuard],
+  },
 ];
 
 @NgModule({

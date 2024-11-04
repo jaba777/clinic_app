@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
   getCategory(category: any, index: number) {
     this.categoryIdSubject.next(category.id);
     this.categoryId = category.id;
-    console.log(category);
+
     this.profession = category.name as string;
     this.categoryIndex = index;
   }

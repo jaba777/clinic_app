@@ -24,7 +24,7 @@ import { CookieServiceService } from '../Services/cookie-service.service';
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
-export class UsersComponent implements OnInit, OnChanges {
+export class UsersComponent implements OnInit {
   user: any = {};
   weeks: any = [];
   weeksIndex = 1;
@@ -69,10 +69,6 @@ export class UsersComponent implements OnInit, OnChanges {
 
     this.updateWeeks();
     this.myId = this.cookieServiceService.getCookie('userId');
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('dasffgsg', changes);
   }
 
   firstElement = '';

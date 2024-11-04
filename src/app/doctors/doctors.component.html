@@ -49,15 +49,28 @@
       <ul>
         <li *ngFor="let doctor of doctors">
           <div class="edit">
-            <img src="Icons/edit.svg" alt="" />
+            <a [routerLink]="'/edit-doctor/' + doctor.id">
+              <img src="Icons/edit.svg" alt="" />
+            </a>
           </div>
-          <div class="delete">
+          <div class="delete" (click)="addDeleteScreen(doctor.id)">
             <img src="Icons/delete.svg" alt="" />
           </div>
         </li>
       </ul>
     </div>
   </section>
+  <div class="booking-remove" *ngIf="deleteUserScreen">
+    <div class="remove" (click)="removeDeleteScreen()">
+      <img src="Icons/remove.svg" alt="" />
+    </div>
+    <div class="text">
+      <p>გსურთ ექაუნთის წაშლა?</p>
+    </div>
+    <div>
+      <button (click)="removeUser()">დიახ</button>
+    </div>
+  </div>
 </div>
 
 <mat-paginator

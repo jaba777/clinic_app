@@ -23,6 +23,8 @@ import { DoctorSignUpModule } from './doctor-sign-up/doctor-sign-up.module';
 import { ProfileModule } from './profile/profile.module';
 import { UsersModule } from './users/users.module';
 import { DoctorsModule } from './doctors/doctors.module';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { EditDoctorModule } from './edit-doctor/edit-doctor.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +48,8 @@ import { DoctorsModule } from './doctors/doctors.module';
     ProfileModule,
     UsersModule,
     DoctorsModule,
+    ProgressSpinnerModule,
+    EditDoctorModule,
   ],
   providers: [
     provideClientHydration(),

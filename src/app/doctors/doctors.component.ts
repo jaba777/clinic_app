@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryServiceService } from '../Services/category-service.service';
 import { UserServiceService } from '../Services/user-service.service';
 import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
+import { AuthService } from '../Services/authService.service';
 
 interface categories {
   id: number;
@@ -21,9 +22,12 @@ export class DoctorsComponent implements OnInit {
   doctors: any = [];
   totalItems = 1;
   categoryIndex: number = 0;
+  doctorId: number | null = null;
+  deleteUserScreen = false;
   constructor(
     private categoryServiceService: CategoryServiceService,
-    private userServiceService: UserServiceService
+    private userServiceService: UserServiceService,
+    private authService: AuthService
   ) {}
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -42,7 +46,6 @@ export class DoctorsComponent implements OnInit {
           })
         )
         .subscribe((doctorResponse) => {
-          console.log('Doctor Response:', doctorResponse.my_profile);
           this.doctors = doctorResponse.my_profile;
           this.totalItems = doctorResponse.totalPages;
         });
@@ -59,5 +62,23 @@ export class DoctorsComponent implements OnInit {
   pageChanged(event: any) {
     this.pageSubject.next(event.pageIndex + 1);
     this.currentPage = event.pageIndex + 1;
+  }
+
+  addDeleteScreen(userId: number) {
+    this.deleteUserScreen = true;
+    this.doctorId = userId;
+  }
+  removeDeleteScreen() {
+    this.deleteUserScreen = false;
+  }
+  removeUser() {
+    this.authService.UserDelete(this.doctorId).subscribe((item) => {
+      if (item.success == true) {
+        this.doctors = this.doctors.filter(
+          (user: any) => user.id != this.doctorId
+        );
+        this.deleteUserScreen = false;
+      }
+    });
   }
 }

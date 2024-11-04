@@ -40,7 +40,6 @@ export class ProfileComponent implements OnInit {
   updateWeeks() {
     const { endweeks, countOfWeeks } = this.getWeeksOfMonth(this.weeksIndex);
     this.weeks = endweeks;
-    console.log('weeks', endweeks);
     this.countOfWeeks = countOfWeeks;
     const month = endweeks[endweeks.length - 1];
     const date = new Date(this.thisYear, month.month - 1);

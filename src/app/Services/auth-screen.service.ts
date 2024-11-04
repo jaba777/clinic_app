@@ -12,7 +12,6 @@ export class AuthScreenService implements OnInit {
     const isSignInLocal = this.localService.getLocalstorage('isSignIn');
     if (isSignInLocal) {
       this.isSignin = JSON.parse(isSignInLocal);
-      console.log('sasas', JSON.parse(isSignInLocal));
     }
   }
 

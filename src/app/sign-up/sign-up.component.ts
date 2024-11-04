@@ -74,8 +74,6 @@ export class SignUpComponent implements OnInit {
             this.result = response?.message;
             this.loading = false;
           }
-
-          console.log('response', response);
         });
     } else {
       return this.authService
@@ -93,7 +91,6 @@ export class SignUpComponent implements OnInit {
           this.isOtp = true;
           this.result = response?.message;
           this.loading = false;
-          console.log('response', response);
         });
     }
   }

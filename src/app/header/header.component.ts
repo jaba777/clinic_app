@@ -59,11 +59,10 @@ export class HeaderComponent implements OnInit {
       );
 
       const userId = this.cookieServiceService.getCookie('userId');
-      console.log('userId', userId);
+
       if (userId) {
         this.userServiceService.MyProfile(userId).subscribe((response) => {
           this.userServiceService.myUser = response.my_profile;
-          console.log('my_profile', response.my_profile);
         });
       }
     }

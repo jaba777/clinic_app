@@ -12,7 +12,6 @@ export class AdminGuardGuard implements CanActivate {
       userRole = this.cookieService.get('role');
     }
     const defaultPage = route.routeConfig?.path === 'home';
-    console.log('userRole', userRole);
 
     if (userRole == 'admin') {
       return true;

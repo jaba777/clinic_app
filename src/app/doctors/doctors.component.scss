@@ -154,4 +154,39 @@
       }
     }
   }
+  .booking-remove {
+    background: #ffff;
+    width: 400px;
+    position: fixed;
+    right: 2rem;
+    bottom: 5rem;
+    display: flex;
+    padding: 2rem 1rem;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    .text {
+      margin-top: 1rem;
+    }
+    button {
+      background: #ff93a6;
+      color: #fff;
+      padding: 0.8rem 1.6rem;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .remove {
+      position: relative;
+      width: 100%;
+      img {
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 10px;
+        height: 10px;
+        cursor: pointer;
+      }
+    }
+  }
 }
