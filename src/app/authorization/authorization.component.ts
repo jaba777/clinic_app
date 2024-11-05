@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 })
 export class AuthorizationComponent implements OnInit {
   signInForm: any;
+  authPage = 1;
+  emailVerifyForm: any;
 
   constructor(
     private fb: FormBuilder,
@@ -29,6 +31,20 @@ export class AuthorizationComponent implements OnInit {
   ngOnInit(): void {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            '^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,16}$'
+          ),
+        ],
+      ],
+    });
+
+    this.emailVerifyForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      otp: ['', [Validators.required]],
       password: [
         '',
         [
@@ -67,6 +83,59 @@ export class AuthorizationComponent implements OnInit {
         this.authScreenService.removeSignScreen();
         this.router.navigate(['/home']);
       });
+    }
+  }
+
+  VerifyEmail() {
+    this.isSpinner = true;
+    if (this.emailVerifyForm.get('email').valid) {
+      this.authService
+        .VerifyEmail(this.emailVerifyForm.get('email').value)
+        .subscribe((response) => {
+          if (response.success === true) {
+            this.authPage = 3;
+          }
+          this.isSpinner = false;
+        });
+    }
+  }
+  VerifyOtp() {
+    this.isSpinner = true;
+    if (
+      this.emailVerifyForm.get('email').valid &&
+      this.emailVerifyForm.get('otp').valid
+    ) {
+      this.authService
+        .VerifyOtp(
+          this.emailVerifyForm.get('email').value,
+          this.emailVerifyForm.get('otp').value
+        )
+        .subscribe((response) => {
+          if (response.success === true) {
+            this.authPage = 4;
+          }
+          this.isSpinner = false;
+        });
+    }
+  }
+
+  ChangePassword() {
+    this.isSpinner = true;
+    if (
+      this.emailVerifyForm.get('email').valid &&
+      this.emailVerifyForm.get('password').valid
+    ) {
+      this.authService
+        .ChangePassword(
+          this.emailVerifyForm.get('email').value,
+          this.emailVerifyForm.get('password').value
+        )
+        .subscribe((response) => {
+          if (response.success === true) {
+            this.authPage = 1;
+          }
+          this.isSpinner = false;
+        });
     }
   }
 }

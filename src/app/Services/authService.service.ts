@@ -30,4 +30,21 @@ export class AuthService {
   SignIn(data: any): Observable<any> {
     return this.http.post(`${this.baseUrl}/api/Auth/sign-in`, data);
   }
+
+  VerifyEmail(email: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/Users/verify-email`, { email });
+  }
+
+  VerifyOtp(email: string, otp: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/Users/verify-otp`, {
+      email,
+      otp,
+    });
+  }
+  ChangePassword(email: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/Users/change-password`, {
+      email,
+      password,
+    });
+  }
 }

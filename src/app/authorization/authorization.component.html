@@ -8,6 +8,7 @@
       [formGroup]="signInForm"
       class="sign-in-form"
       (ngSubmit)="SignInFunct()"
+      *ngIf="authPage === 1"
     >
       <h1>ავტორიზაცია</h1>
       <div>
@@ -53,9 +54,101 @@
           >
         </div>
       </div>
-      <div class="forget-password"><span>პაროლის აღდგენა</span></div>
+      <div class="forget-password" (click)="authPage = 2">
+        <span>პაროლის აღდგენა</span>
+      </div>
       <p-progressSpinner ariaLabel="loading" *ngIf="isSpinner" />
       <div class="sign-in-btn"><button type="submit">შესვლა</button></div>
+    </form>
+
+    <form
+      [formGroup]="emailVerifyForm"
+      class="sign-in-form"
+      (ngSubmit)="VerifyEmail()"
+      *ngIf="authPage === 2"
+    >
+      <h1>შეიყვანეთ მეილი</h1>
+      <div>
+        <div class="input-box">
+          <label for="email-verify">მეილი:</label>
+          <input id="email-verify" formControlName="email" type="email" />
+        </div>
+        <div
+          *ngIf="
+            emailVerifyForm.get('email').invalid &&
+            emailVerifyForm.get('email').touched
+          "
+        >
+          <small *ngIf="emailVerifyForm.get('email').hasError('required')"
+            >შეავსეთ მეილი</small
+          >
+          <small *ngIf="emailVerifyForm.get('email').hasError('email')"
+            >შეიყვანეთ ვალიდური მეილი</small
+          >
+        </div>
+      </div>
+
+      <p-progressSpinner ariaLabel="loading" *ngIf="isSpinner" />
+      <div class="sign-in-btn"><button type="submit">გაგზავნა</button></div>
+    </form>
+
+    <form
+      [formGroup]="emailVerifyForm"
+      class="sign-in-form"
+      (ngSubmit)="VerifyOtp()"
+      *ngIf="authPage === 3"
+    >
+      <h1>შეიყვანეთ კოდი</h1>
+      <div>
+        <div class="input-box">
+          <label for="otp-verify">კოდი:</label>
+          <input id="otp-verify" formControlName="otp" type="text" />
+        </div>
+        <div
+          *ngIf="
+            emailVerifyForm.get('otp').invalid &&
+            emailVerifyForm.get('otp').touched
+          "
+        >
+          <small *ngIf="emailVerifyForm.get('otp').hasError('required')"
+            >შეიყვანეთ კოდი</small
+          >
+        </div>
+      </div>
+
+      <p-progressSpinner ariaLabel="loading" *ngIf="isSpinner" />
+      <div class="sign-in-btn"><button type="submit">გაგზავნა</button></div>
+    </form>
+    <form
+      [formGroup]="emailVerifyForm"
+      class="sign-in-form"
+      (ngSubmit)="ChangePassword()"
+      *ngIf="authPage === 4"
+    >
+      <h1>შეიყვანეთ პაროლი</h1>
+      <div>
+        <div class="input-box">
+          <label for="password">პაროლი:</label>
+          <input id="password" formControlName="password" type="password" />
+        </div>
+        <div
+          *ngIf="
+            emailVerifyForm.get('password').invalid &&
+            emailVerifyForm.get('password').touched
+          "
+        >
+          <small *ngIf="emailVerifyForm.get('password').hasError('required')"
+            >შეიყვანეთ პაროლი</small
+          >
+          <small *ngIf="emailVerifyForm.get('password').hasError('pattern')"
+            >პაროლი უნდა იყოს მინიმუმ 8 ასოსგან შემდგარი,უნდა შეიცავდეს დიდ და
+            პატარა ასოს და სიმბოლოს</small
+          >
+        </div>
+      </div>
+
+      <p-progressSpinner ariaLabel="loading" *ngIf="isSpinner" />
+      <div class="sign-in-btn"><button type="submit">გაგზავნა</button></div>
     </form>
   </div>
 </section>
