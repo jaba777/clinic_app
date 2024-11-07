@@ -110,8 +110,8 @@ export class UsersComponent implements OnInit {
   }
 
   getWeeksOfMonth(index: number) {
-    const start = new Date(); // today's date
-    const end = addDays(start, 30); // 30 days from today
+    const start = new Date();
+    const end = addDays(start, 30);
 
     const days = eachDayOfInterval({ start, end });
 

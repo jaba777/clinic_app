@@ -57,7 +57,18 @@
           {{ this.userServiceService.myUser.name }}
         </li>
         <li *ngIf="this.userServiceService.myUser.photo == null">
-          <a routerLink="/profile"><img src="/Images/Profile.png" alt="" /></a>
+          <a [routerLink]="'/profile/' + this.userServiceService.myUser.id"
+            ><img src="/Images/Profile.png" alt=""
+          /></a>
+        </li>
+        <li *ngIf="this.userServiceService.myUser.photo !== null">
+          <a [routerLink]="'/profile/' + this.userServiceService.myUser.id"
+            ><img
+              [src]="
+                'data:image/jpeg;base64,' + this.userServiceService.myUser.photo
+              "
+              alt=""
+          /></a>
         </li>
         <li><button (click)="SignOut()">Sign Out</button></li>
       </ul>

@@ -5,6 +5,10 @@
         src="/Images/Profile.png"
         alt=""
         *ngIf="userServiceService.myUser.photo == null"
+      /><img
+        [src]="'data:image/jpeg;base64,' + userServiceService.myUser.photo"
+        alt=""
+        *ngIf="userServiceService.myUser.photo !== null"
       />
     </div>
     <div class="user-info">
@@ -18,12 +22,16 @@
           <span>Email :</span><span>{{ userServiceService.myUser.email }}</span>
         </li>
         <li><span>პაროლის შეცვლა</span></li>
-        <li><span>ჩემი ჯავშანი :</span><span>(1)</span></li>
+        <li>
+          <span>ჩემი ჯავშანი :</span><span>{{ totalCount }}</span>
+        </li>
       </ul>
     </div>
   </div>
   <div class="my-booking">
-    <h2>ჩემი ჯავშანი <span>( 2 )</span></h2>
+    <h2>
+      ჩემი ჯავშანი <span>( {{ totalCount }} )</span>
+    </h2>
     <div class="dates">
       <p>{{ thisYear }}</p>
       <p>{{ getMonth }}</p>
@@ -45,7 +53,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="userServiceService.myUser.role == 'user'">
         <tr *ngFor="let row of time">
           <td>{{ row }}</td>
           <td *ngFor="let col of weeks">
@@ -53,9 +61,64 @@
               *ngIf="col.week === 'Sat' || col.week == 'Sun'"
               class="block"
             ></div>
+            <div *ngIf="isDayBooked(col.day, row)" class="my-booked">
+              <img
+                src="Icons/remove.svg"
+                alt=""
+                (click)="getBookId(col.day, row)"
+              />
+              <span>ჩემი ჯავშანი</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="userServiceService.myUser.role !== 'user'">
+        <tr *ngFor="let row of time">
+          <td>{{ row }}</td>
+          <td *ngFor="let col of weeks">
+            <div
+              *ngIf="col.week === 'Sat' || col.week == 'Sun'"
+              class="block"
+            ></div>
+            <div
+              *ngIf="
+                !isDayBooked(col.day, row) &&
+                col.week !== 'Sat' &&
+                col.week !== 'Sun'
+              "
+              class="free-place"
+              (drop)="drop($event, col, row)"
+              (dragover)="allowDrop($event)"
+            ></div>
+
+            <!-- The my-booked div that will be dragged and dropped -->
+            <div
+              *ngIf="isDayBooked(col.day, row) as bookingId"
+              class="my-booked"
+              draggable="true"
+              (dragstart)="drag($event, bookingId)"
+              id="drag-{{ col.day }}-{{ row }}"
+            >
+              <img
+                src="Icons/remove.svg"
+                alt="Remove booking"
+                (click)="getBookId(col.day, row)"
+              />
+
+              <span>დაჯავშნილია</span>
+            </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+</div>
+<div class="booking-remove" *ngIf="removeBookingScreen">
+  <div class="remove">
+    <img src="Icons/remove.svg" alt="" (click)="onRemoveBooking()" />
+  </div>
+  <div>
+    <p>გსურთ ჯავშნის წაშლა?</p>
+  </div>
+  <button (click)="removeBooking()">დიახ</button>
 </div>
