@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../Services/authService.service';
-import { LocalService } from '../Services/localService.service';
 import { CategoryServiceService } from '../Services/category-service.service';
 import { Observable } from 'rxjs';
 import {
@@ -13,6 +12,7 @@ import {
 } from 'rxjs/operators';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CookieServiceService } from '../Services/cookie-service.service';
+import { MessageService } from 'primeng/api';
 
 interface Option {
   id: number;
@@ -42,7 +42,8 @@ export class DoctorSignUpComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private category: CategoryServiceService,
-    private cookieServiceService: CookieServiceService
+    private cookieServiceService: CookieServiceService,
+    private messageService: MessageService
   ) {}
 
   otp: string = '';
@@ -130,12 +131,23 @@ export class DoctorSignUpComponent implements OnInit {
     if (this.selectedResume) formData.append('resume', this.selectedResume);
 
     if (this.signUpForm.valid && this.selectedPhoto && this.selectedResume) {
-      this.authService
-        .DoctorSignUp(formData, this.userId)
-        .subscribe((response) => {
-          this.message = response.message;
+      this.authService.DoctorSignUp(formData, this.userId).subscribe({
+        next: (response) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: response.message,
+          });
           this.loading = false;
-        });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
+      });
     }
   }
 }

@@ -6,6 +6,7 @@ import { AuthService } from '../Services/authService.service';
 import { CookieServiceService } from '../Services/cookie-service.service';
 import { UserServiceService } from '../Services/user-service.service';
 import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-authorization',
@@ -24,7 +25,8 @@ export class AuthorizationComponent implements OnInit {
     private authService: AuthService,
     private cookieServiceService: CookieServiceService,
     private userServiceService: UserServiceService,
-    private router: Router
+    private router: Router,
+    private messageService: MessageService
   ) {}
   isSpinner: boolean = false;
 
@@ -73,15 +75,24 @@ export class AuthorizationComponent implements OnInit {
   SignInFunct() {
     this.isSpinner = true;
     if (this.signInForm.valid) {
-      // If valid, make the sign-in request
-      this.authService.SignIn(this.signInForm.value).subscribe((response) => {
-        this.cookieServiceService.setCookie('token', response.token);
-        this.cookieServiceService.setCookie('userId', response.user.id);
-        this.cookieServiceService.setCookie('role', response.user.role);
-        this.isSpinner = false;
-        this.userServiceService.myUser = response.user;
-        this.authScreenService.removeSignScreen();
-        this.router.navigate(['/home']);
+      this.authService.SignIn(this.signInForm.value).subscribe({
+        next: (response) => {
+          this.cookieServiceService.setCookie('token', response.token);
+          this.cookieServiceService.setCookie('userId', response.user.id);
+          this.cookieServiceService.setCookie('role', response.user.role);
+          this.isSpinner = false;
+          this.userServiceService.myUser = response.user;
+          this.authScreenService.removeSignScreen();
+          this.router.navigate(['/home']);
+        },
+        error: (err) => {
+          this.isSpinner = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
       });
     }
   }
@@ -91,11 +102,22 @@ export class AuthorizationComponent implements OnInit {
     if (this.emailVerifyForm.get('email').valid) {
       this.authService
         .VerifyEmail(this.emailVerifyForm.get('email').value)
-        .subscribe((response) => {
-          if (response.success === true) {
-            this.authPage = 3;
-          }
-          this.isSpinner = false;
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.authPage = 3;
+            }
+
+            this.isSpinner = false;
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+            this.isSpinner = false;
+          },
         });
     }
   }
@@ -110,11 +132,21 @@ export class AuthorizationComponent implements OnInit {
           this.emailVerifyForm.get('email').value,
           this.emailVerifyForm.get('otp').value
         )
-        .subscribe((response) => {
-          if (response.success === true) {
-            this.authPage = 4;
-          }
-          this.isSpinner = false;
+        .subscribe({
+          next: (response) => {
+            if (response.success === true) {
+              this.authPage = 4;
+            }
+            this.isSpinner = false;
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+            this.isSpinner = false;
+          },
         });
     }
   }

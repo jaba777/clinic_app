@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [EditDoctorComponent],
@@ -16,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatFormFieldModule,
     MatAutocompleteModule,
     ReactiveFormsModule,
+    ToastModule,
   ],
 })
 export class EditDoctorModule {}

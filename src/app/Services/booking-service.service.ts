@@ -14,6 +14,18 @@ export class BookingServiceService {
     return this.http.post(`${this.baseUrl}/api/Booking/add-booking`, data);
   }
 
+  UpdateBooking(
+    data: any,
+    bookId: number | string,
+    userId: number | string | null,
+    receiverId: string | null
+  ): Observable<any> {
+    return this.http.put(
+      `${this.baseUrl}/api/Booking/update-book/${bookId}/${userId}?receiverId=${receiverId}`,
+      data
+    );
+  }
+
   GetBooks(
     startDate: string,
     endDate: string,
@@ -21,6 +33,11 @@ export class BookingServiceService {
   ): Observable<any> {
     return this.http.get(
       `${this.baseUrl}/api/Booking/get-books?startDate=${startDate}&endDate=${endDate}&doctorId=${doctorId}`
+    );
+  }
+  GetBookCount(userId: number | string) {
+    return this.http.get(
+      `${this.baseUrl}/api/Booking/get-book-count?userId=${userId}`
     );
   }
   RemoveBook(bookId: any, userId: string): Observable<any> {

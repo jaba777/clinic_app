@@ -3,6 +3,7 @@
   *ngIf="authScreenService.isSignin"
   (click)="onAuthorizationClick($event)"
 >
+  <p-toast />
   <div class="sign-in" *ngIf="authScreenService.isSignin">
     <form
       [formGroup]="signInForm"

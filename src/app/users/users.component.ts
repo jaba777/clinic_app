@@ -8,16 +8,10 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { UserServiceService } from '../Services/user-service.service';
 import { Times } from '../models/Times';
-import {
-  format,
-  eachDayOfInterval,
-  eachWeekOfInterval,
-  getDay,
-  addDays,
-  getMonth,
-} from 'date-fns';
+import { format, eachDayOfInterval, addDays } from 'date-fns';
 import { BookingServiceService } from '../Services/booking-service.service';
 import { CookieServiceService } from '../Services/cookie-service.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-users',
@@ -54,7 +48,8 @@ export class UsersComponent implements OnInit {
     private route: ActivatedRoute,
     private userServiceService: UserServiceService,
     private bookingServiceService: BookingServiceService,
-    private cookieServiceService: CookieServiceService
+    private cookieServiceService: CookieServiceService,
+    private messageService: MessageService
   ) {}
   ngOnInit(): void {
     const userId = this.route.snapshot.params['id'];
@@ -110,8 +105,8 @@ export class UsersComponent implements OnInit {
   }
 
   getWeeksOfMonth(index: number) {
-    const start = new Date(); // today's date
-    const end = addDays(start, 30); // 30 days from today
+    const start = new Date();
+    const end = addDays(start, 30);
 
     const days = eachDayOfInterval({ start, end });
 
@@ -191,29 +186,49 @@ export class UsersComponent implements OnInit {
           user_id: this.myId,
           doctor_id: this.doctorId,
         })
-        .subscribe((item) => {
-          if (item.success === true) {
+        .subscribe({
+          next: (item) => {
             this.bookingWeek.push(item.book);
-          }
-
-          this.bookingScreen = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: item.message,
+            });
+            this.bookingScreen = false;
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+            this.bookingScreen = false;
+          },
         });
     }
   }
 
   removeBooking() {
     if (this.myId && this.doctorId) {
-      this.bookingServiceService
-        .RemoveBook(this.bookId, this.myId)
-        .subscribe((item) => {
-          if (item.success === true) {
-            this.bookingWeek = this.bookingWeek.filter(
-              (item: any) => item.id !== this.bookId
-            );
-          }
-
-          this.removeBookingScreen = false;
-        });
+      this.bookingServiceService.RemoveBook(this.bookId, this.myId).subscribe({
+        next: (item) => {
+          this.bookingWeek = this.bookingWeek.filter(
+            (item: any) => item.id !== this.bookId
+          );
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: item.message,
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
+      });
     }
   }
 
