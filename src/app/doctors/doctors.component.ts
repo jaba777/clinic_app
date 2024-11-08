@@ -3,6 +3,7 @@ import { CategoryServiceService } from '../Services/category-service.service';
 import { UserServiceService } from '../Services/user-service.service';
 import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
 import { AuthService } from '../Services/authService.service';
+import { MessageService } from 'primeng/api';
 
 interface categories {
   id: number;
@@ -27,7 +28,8 @@ export class DoctorsComponent implements OnInit {
   constructor(
     private categoryServiceService: CategoryServiceService,
     private userServiceService: UserServiceService,
-    private authService: AuthService
+    private authService: AuthService,
+    private messageService: MessageService
   ) {}
   ngOnInit(): void {
     if (typeof window !== 'undefined') {
@@ -72,13 +74,27 @@ export class DoctorsComponent implements OnInit {
     this.deleteUserScreen = false;
   }
   removeUser() {
-    this.authService.UserDelete(this.doctorId).subscribe((item) => {
-      if (item.success == true) {
-        this.doctors = this.doctors.filter(
-          (user: any) => user.id != this.doctorId
-        );
-        this.deleteUserScreen = false;
-      }
+    this.authService.UserDelete(this.doctorId).subscribe({
+      next: (item) => {
+        if (item.success == true) {
+          this.doctors = this.doctors.filter(
+            (user: any) => user.id != this.doctorId
+          );
+          this.deleteUserScreen = false;
+        }
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: item.message,
+        });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message,
+        });
+      },
     });
   }
 }

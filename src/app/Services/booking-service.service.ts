@@ -17,10 +17,11 @@ export class BookingServiceService {
   UpdateBooking(
     data: any,
     bookId: number | string,
-    userId: number | string | null
+    userId: number | string | null,
+    receiverId: string | null
   ): Observable<any> {
     return this.http.put(
-      `${this.baseUrl}/api/Booking/update-book/${bookId}/${userId}`,
+      `${this.baseUrl}/api/Booking/update-book/${bookId}/${userId}?receiverId=${receiverId}`,
       data
     );
   }

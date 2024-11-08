@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { AuthService } from '../Services/authService.service';
-import { LocalService } from '../Services/localService.service';
 import { CategoryServiceService } from '../Services/category-service.service';
 import { Observable } from 'rxjs';
 import {
@@ -15,6 +14,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CookieServiceService } from '../Services/cookie-service.service';
 import { UserServiceService } from '../Services/user-service.service';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 interface Option {
   id: number;
@@ -45,7 +45,8 @@ export class EditDoctorComponent {
     private category: CategoryServiceService,
     private cookieServiceService: CookieServiceService,
     private userServiceService: UserServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
 
   otp: string = '';
@@ -155,12 +156,24 @@ export class EditDoctorComponent {
     if (this.selectedPhoto) formData.append('photo', this.selectedPhoto);
     if (this.selectedResume) formData.append('resume', this.selectedResume);
 
-    this.authService.DoctorEdit(formData, this.userId).subscribe((response) => {
-      this.message = response.message;
-      this.loading = false;
-      if (response.success !== true) {
-        window.location.reload();
-      }
+    this.authService.DoctorEdit(formData, this.userId).subscribe({
+      next: (response) => {
+        this.message = response.message;
+        this.loading = false;
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: response.message,
+        });
+      },
+      error: (err) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: err.error.message,
+        });
+      },
     });
   }
 }

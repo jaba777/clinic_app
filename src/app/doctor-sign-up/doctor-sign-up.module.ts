@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { SpinnerComponent } from '../spinner/spinner.component';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [DoctorSignUpComponent, SpinnerComponent],
@@ -17,6 +18,7 @@ import { SpinnerComponent } from '../spinner/spinner.component';
     MatInputModule,
     MatFormFieldModule,
     MatAutocompleteModule,
+    ToastModule,
   ],
 })
 export class DoctorSignUpModule {}

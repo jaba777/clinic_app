@@ -4,6 +4,8 @@ import { ProfileComponent } from './profile.component';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatButtonModule } from '@angular/material/button';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [ProfileComponent],
@@ -12,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
     ProfileRoutingModule,
     DragDropModule,
     MatButtonModule,
+    ToastModule,
   ],
+  providers: [MessageService],
 })
 export class ProfileModule {}

@@ -25,6 +25,7 @@ import { UsersModule } from './users/users.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { EditDoctorModule } from './edit-doctor/edit-doctor.module';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { EditDoctorModule } from './edit-doctor/edit-doctor.module';
     DoctorsModule,
     ProgressSpinnerModule,
     EditDoctorModule,
+    ToastModule,
   ],
   providers: [
     provideClientHydration(),

@@ -1,24 +1,10 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserServiceService } from '../Services/user-service.service';
-import {
-  format,
-  eachDayOfInterval,
-  eachWeekOfInterval,
-  getDay,
-  addDays,
-  getMonth,
-} from 'date-fns';
+import { format, eachDayOfInterval, addDays } from 'date-fns';
 import { Times } from '../models/Times';
-import { BehaviorSubject, combineLatest, switchMap } from 'rxjs';
 import { BookingServiceService } from '../Services/booking-service.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-profile',
@@ -29,7 +15,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     public userServiceService: UserServiceService,
     private bookingServiceService: BookingServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ) {}
   user = {};
   weeks: any = [];
@@ -110,6 +97,7 @@ export class ProfileComponent implements OnInit {
       .GetBooks(startDate, endDate, userId)
       .subscribe((response: any) => {
         this.bookingWeek = response.books;
+        console.log('response.books', response.books);
       });
   }
   growWeekIndex() {
@@ -166,7 +154,7 @@ export class ProfileComponent implements OnInit {
     const isBooked = this.bookingWeek.find(
       (item: any) => item.day === day && item.time === time
     );
-    return isBooked ? isBooked.id : null;
+    return isBooked ? isBooked : null;
   }
   onRemoveBooking() {
     this.removeBookingScreen = false;
@@ -178,13 +166,19 @@ export class ProfileComponent implements OnInit {
 
   drag(ev: DragEvent, bookingId: any): void {
     ev.dataTransfer?.setData('text', (ev.target as HTMLElement).id);
-    ev.dataTransfer?.setData('bookingId', bookingId);
+    ev.dataTransfer?.setData('bookingId', bookingId.id);
+    if (this.userServiceService.myUser.role === 'user') {
+      ev.dataTransfer?.setData('receiverId', bookingId.doctor_id);
+    } else if (this.userServiceService.myUser.role === 'doctor') {
+      ev.dataTransfer?.setData('receiverId', bookingId.user_id);
+    }
   }
 
   drop(ev: DragEvent, col: any, row: any): void {
     ev.preventDefault();
     const data = ev.dataTransfer?.getData('text');
     const bookingId = ev.dataTransfer?.getData('bookingId');
+    const receiverId = ev.dataTransfer?.getData('receiverId');
     const findIndex = this.bookingWeek.findIndex(
       (item: any) => item.id == bookingId
     );
@@ -195,14 +189,28 @@ export class ProfileComponent implements OnInit {
     };
 
     this.bookingServiceService
-      .UpdateBooking(this.bookTime, bookingId as string, this.myId)
-      .subscribe((result: any) => {
-        if ((result.success = true)) {
+      .UpdateBooking(
+        this.bookTime,
+        bookingId as string,
+        this.myId,
+        receiverId as string
+      )
+      .subscribe({
+        next: (result) => {
           this.bookingWeek[findIndex] = result.book;
-        }
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: result.message,
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
       });
-  }
-  UpdateBooking(data: any, bookId: number, userId: number | string) {
-    this.bookingServiceService.UpdateBooking(data, bookId, userId);
   }
 }

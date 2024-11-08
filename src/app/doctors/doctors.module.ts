@@ -4,6 +4,7 @@ import { DoctorsRoutingModule } from './doctors-routing.module';
 import { DoctorsComponent } from './doctors.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
   declarations: [DoctorsComponent],
@@ -12,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     DoctorsRoutingModule,
     NgxPaginationModule,
     MatPaginatorModule,
+    ToastModule,
   ],
 })
 export class DoctorsModule {}
