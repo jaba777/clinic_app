@@ -54,7 +54,7 @@
           </th>
         </tr>
       </thead>
-      <tbody *ngIf="userServiceService.myUser.role == 'user'">
+      <!-- <tbody *ngIf="userServiceService.myUser.role == 'user'">
         <tr *ngFor="let row of time">
           <td>{{ row }}</td>
           <td *ngFor="let col of weeks">
@@ -72,8 +72,8 @@
             </div>
           </td>
         </tr>
-      </tbody>
-      <tbody *ngIf="userServiceService.myUser.role !== 'user'">
+      </tbody> -->
+      <tbody>
         <tr *ngFor="let row of time">
           <td>{{ row }}</td>
           <td *ngFor="let col of weeks">
@@ -121,4 +121,11 @@
     <p>გსურთ ჯავშნის წაშლა?</p>
   </div>
   <button (click)="removeBooking()">დიახ</button>
+</div>
+
+<div class="remove-books">
+  <button (click)="removeBookings()">
+    <img src="/Icons/remove-Vector.svg" alt="" />
+    <span>წაშლა</span>
+  </button>
 </div>

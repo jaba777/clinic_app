@@ -11,6 +11,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  form {
+    padding: 1rem 1.2rem;
+  }
   .sign-in {
     width: 40%;
     background: #fff;
@@ -26,21 +29,27 @@
       align-items: center;
       gap: 1rem;
       margin-top: 1rem;
+      width: 100%;
       .input-box {
         display: flex;
         flex-direction: column;
+        width: 300px;
+        margin: 0 auto;
         input {
           outline: none;
           border: 1px solid rgb(75, 170, 194);
           border-radius: 1rem;
           padding: 0.6rem 0.4rem;
-          width: 300px;
+          width: 100%;
         }
         label {
           color: #053354;
           font-size: 15px;
           font-weight: 600;
         }
+      }
+      small {
+        color: red;
       }
       .p-element {
         .p-progress-spinner {

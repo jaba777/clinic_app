@@ -40,9 +40,18 @@ export class BookingServiceService {
       `${this.baseUrl}/api/Booking/get-book-count?userId=${userId}`
     );
   }
-  RemoveBook(bookId: any, userId: string): Observable<any> {
+  RemoveBook(bookId: any, userId: string | number): Observable<any> {
     return this.http.delete(
       `${this.baseUrl}/api/Booking/remove-book/${bookId}?userId=${userId}`
+    );
+  }
+  RemoveBooks(
+    userId: any,
+    startDate: string,
+    endDate: string
+  ): Observable<any> {
+    return this.http.delete(
+      `${this.baseUrl}/api/Booking/remove-books/${userId}?startDate=${startDate}&endDate=${endDate}`
     );
   }
 }
