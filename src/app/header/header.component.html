@@ -56,12 +56,22 @@
         <li>
           {{ this.userServiceService.myUser.name }}
         </li>
-        <li *ngIf="this.userServiceService.myUser.photo == null">
+        <li
+          *ngIf="
+            this.userServiceService.myUser.photo == null &&
+            this.userServiceService.myUser.role !== 'admin'
+          "
+        >
           <a [routerLink]="'/profile/' + this.userServiceService.myUser.id"
             ><img src="/Images/Profile.png" alt=""
           /></a>
         </li>
-        <li *ngIf="this.userServiceService.myUser.photo !== null">
+        <li
+          *ngIf="
+            this.userServiceService.myUser.photo !== null &&
+            this.userServiceService.myUser.role !== 'admin'
+          "
+        >
           <a [routerLink]="'/profile/' + this.userServiceService.myUser.id"
             ><img
               [src]="
@@ -70,7 +80,11 @@
               alt=""
           /></a>
         </li>
-        <li><button (click)="SignOut()">Sign Out</button></li>
+        <li>
+          <button (click)="this.cookieServiceService.removeCookieAll()">
+            Sign Out
+          </button>
+        </li>
       </ul>
     </div>
   </div>

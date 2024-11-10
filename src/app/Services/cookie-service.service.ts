@@ -1,5 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { Router } from '@angular/router';
+import { UserServiceService } from '../Services/user-service.service';
 interface User {
   name: string;
   userId: number | null;
@@ -12,7 +14,11 @@ export class CookieServiceService implements OnInit {
     name: '',
     userId: null,
   };
-  constructor(private cookieService: CookieService) {}
+  constructor(
+    private cookieService: CookieService,
+    private router: Router,
+    private userServiceService: UserServiceService
+  ) {}
 
   ngOnInit(): void {
     this.user = {
@@ -31,6 +37,11 @@ export class CookieServiceService implements OnInit {
       name: '',
       userId: null,
     };
+
     this.cookieService.deleteAll();
+    this.userServiceService.myUser = {};
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 50);
   }
 }

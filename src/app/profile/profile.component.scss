@@ -156,15 +156,40 @@
       tbody {
         tr {
           &:nth-child(even) {
-            background-color: #f9f9f9; // Zebra stripe effect
+            background-color: #f9f9f9;
           }
 
           &:hover {
-            background-color: #f1f1f1; // Highlight row on hover
+            background-color: #f1f1f1;
           }
           font-weight: 100;
         }
       }
+    }
+  }
+}
+.remove-books {
+  width: 1400px;
+  max-width: 100%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: flex-end;
+  button {
+    background: #ff93a6;
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.8rem 0.9rem;
+    border-radius: 20px;
+    img {
+      width: 20px;
+      height: 20px;
+    }
+    span {
+      font-size: 18px;
     }
   }
 }
@@ -176,7 +201,9 @@
   right: 2rem;
   bottom: 5rem;
   display: flex;
-  gap: 4rem;
+  gap: 1rem;
+  flex-direction: column;
+  z-index: 100;
   button {
     background: #ff93a6;
     color: #fff;
@@ -187,9 +214,8 @@
   }
   .remove {
     position: relative;
-    width: 100%;
+
     img {
-      position: absolute;
       left: 10px;
       top: 10px;
       width: 10px;

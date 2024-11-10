@@ -122,7 +122,6 @@ export class EditDoctorComponent {
 
   onFileSelected(event: Event, type: 'photo' | 'resume') {
     const file = (event.target as HTMLInputElement).files?.[0];
-    console.log('event', (event.target as HTMLInputElement).files);
     if (file) {
       if (type === 'photo') {
         this.selectedPhoto = file;

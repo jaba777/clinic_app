@@ -73,9 +73,8 @@ export class HeaderComponent implements OnInit {
     this.myControl.setValue(selectedOption.name);
   }
 
-  SignOut() {
-    this.cookieServiceService.removeCookieAll();
-    this.userServiceService.myUser = {};
-    window.location.reload();
-  }
+  // SignOut() {
+  //   this.cookieServiceService.removeCookieAll();
+  //   this.userServiceService.myUser = {};
+  // }
 }

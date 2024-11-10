@@ -97,7 +97,6 @@ export class ProfileComponent implements OnInit {
       .GetBooks(startDate, endDate, userId)
       .subscribe((response: any) => {
         this.bookingWeek = response.books;
-        console.log('response.books', response.books);
       });
   }
   growWeekIndex() {
@@ -145,7 +144,39 @@ export class ProfileComponent implements OnInit {
             );
             this.totalCount--;
             this.removeBookingScreen = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: item.message,
+            });
           }
+        });
+    }
+  }
+
+  removeBookings() {
+    if (this.userServiceService.myUser.id) {
+      this.bookingServiceService
+        .RemoveBooks(this.myId, this.firstElement, this.lastElement)
+        .subscribe({
+          next: (item) => {
+            if (item.success === true) {
+              this.totalCount -= this.bookingWeek.length;
+              this.bookingWeek = [];
+            }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: item.message,
+            });
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          },
         });
     }
   }

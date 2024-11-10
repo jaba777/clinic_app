@@ -43,10 +43,11 @@ export class UsersComponent implements OnInit {
   myId: any;
 
   @Input() logging: boolean = false;
+  totalCount: number = 0;
 
   constructor(
     private route: ActivatedRoute,
-    private userServiceService: UserServiceService,
+    public userServiceService: UserServiceService,
     private bookingServiceService: BookingServiceService,
     private cookieServiceService: CookieServiceService,
     private messageService: MessageService
@@ -60,6 +61,7 @@ export class UsersComponent implements OnInit {
         .subscribe((response) => {
           this.user = response.user;
         });
+      this.getCount(userId as string);
     }
 
     this.updateWeeks();
@@ -86,22 +88,24 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  isDayBooked(day: any, time: string): boolean {
-    return this.bookingWeek.some(
+  isDayBooked(day: any, time: string): any {
+    const isBooked = this.bookingWeek.find(
       (item: any) =>
         item.day === day &&
         item.time === time &&
         item.user_id === Number(this.myId)
     );
+    return isBooked ? isBooked : null;
   }
 
-  isDayOtherBooked(day: any, time: string): boolean {
-    return this.bookingWeek.some(
+  isDayOtherBooked(day: any, time: string): any {
+    const isBooked = this.bookingWeek.find(
       (item: any) =>
         item.day === day &&
         item.time === time &&
         item.user_id !== Number(this.myId)
     );
+    return isBooked ? isBooked : null;
   }
 
   getWeeksOfMonth(index: number) {
@@ -178,6 +182,20 @@ export class UsersComponent implements OnInit {
     this.removeBookingScreen = true;
   }
 
+  getDoctorBook(day: any, time: string) {
+    const book = this.bookingWeek.find(
+      (item: any) =>
+        item.day === day &&
+        item.time === time &&
+        item.doctor_id === Number(this.doctorId)
+    );
+    if (book) {
+      this.bookId = book.id;
+    }
+
+    this.removeBookingScreen = true;
+  }
+
   addBooking() {
     if (this.myId && this.doctorId) {
       this.bookingServiceService
@@ -195,6 +213,7 @@ export class UsersComponent implements OnInit {
               detail: item.message,
             });
             this.bookingScreen = false;
+            this.totalCount++;
           },
           error: (err) => {
             this.messageService.add({
@@ -215,6 +234,7 @@ export class UsersComponent implements OnInit {
           this.bookingWeek = this.bookingWeek.filter(
             (item: any) => item.id !== this.bookId
           );
+          this.totalCount--;
           this.messageService.add({
             severity: 'success',
             summary: 'Success',
@@ -232,10 +252,166 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  removeBookings() {
+    if (this.userServiceService.myUser.id) {
+      this.bookingServiceService
+        .RemoveBooks(this.doctorId, this.firstElement, this.lastElement)
+        .subscribe({
+          next: (item) => {
+            if (item.success === true) {
+              this.totalCount -= this.bookingWeek.length;
+              this.bookingWeek = [];
+            }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: item.message,
+            });
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          },
+        });
+    }
+  }
+
+  removeBookingByAdmin() {
+    if (this.doctorId) {
+      this.bookingServiceService
+        .RemoveBook(this.bookId, this.doctorId)
+        .subscribe({
+          next: (item) => {
+            this.bookingWeek = this.bookingWeek.filter(
+              (item: any) => item.id !== this.bookId
+            );
+            this.totalCount--;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: item.message,
+            });
+          },
+          error: (err) => {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          },
+        });
+    }
+  }
+
   onbookingClick(): void {
     this.bookingScreen = false;
   }
   onRemoveBooking() {
     this.removeBookingScreen = false;
+  }
+  getCount(userId: number | string) {
+    this.bookingServiceService.GetBookCount(userId).subscribe((item: any) => {
+      this.totalCount = item.books;
+    });
+  }
+
+  allowDrop(ev: DragEvent): void {
+    ev.preventDefault();
+  }
+
+  drag(ev: DragEvent, bookingId: any): void {
+    ev.dataTransfer?.setData('text', (ev.target as HTMLElement).id);
+    ev.dataTransfer?.setData('bookingId', bookingId.id);
+    ev.dataTransfer?.setData('receiverId', bookingId.doctor_id);
+  }
+  drop(ev: DragEvent, col: any, row: any): void {
+    ev.preventDefault();
+    const data = ev.dataTransfer?.getData('text');
+    const bookingId = ev.dataTransfer?.getData('bookingId');
+    const receiverId = ev.dataTransfer?.getData('receiverId');
+    const findIndex = this.bookingWeek.findIndex(
+      (item: any) => item.id == bookingId
+    );
+    this.bookTime = {
+      time: row,
+      date: `${col.year}-${col.month}-${col.day}`,
+    };
+
+    this.bookingServiceService
+      .UpdateBooking(
+        this.bookTime,
+        bookingId as string,
+        this.myId,
+        receiverId as string
+      )
+      .subscribe({
+        next: (result) => {
+          this.bookingWeek[findIndex] = result.book;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: result.message,
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
+      });
+  }
+
+  AdminAllowDrop(ev: DragEvent): void {
+    ev.preventDefault();
+  }
+
+  AdminDrag(ev: DragEvent, bookingId: any): void {
+    ev.dataTransfer?.setData('bookingId', bookingId.id);
+    ev.dataTransfer?.setData('receiverId', bookingId.doctor_id);
+    ev.dataTransfer?.setData('userId', bookingId.user_id);
+  }
+  AdminDrop(ev: DragEvent, col: any, row: any): void {
+    ev.preventDefault();
+
+    const bookingId = ev.dataTransfer?.getData('bookingId');
+    const receiverId = ev.dataTransfer?.getData('receiverId');
+    const userId = ev.dataTransfer?.getData('userId');
+    const findIndex = this.bookingWeek.findIndex(
+      (item: any) => item.id == bookingId
+    );
+    this.bookTime = {
+      time: row,
+      date: `${col.year}-${col.month}-${col.day}`,
+    };
+
+    this.bookingServiceService
+      .UpdateBooking(
+        this.bookTime,
+        bookingId as string,
+        receiverId as string,
+        userId as string
+      )
+      .subscribe({
+        next: (result) => {
+          this.bookingWeek[findIndex] = result.book;
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Success',
+            detail: result.message,
+          });
+        },
+        error: (err) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Error',
+            detail: err.error.message,
+          });
+        },
+      });
   }
 }

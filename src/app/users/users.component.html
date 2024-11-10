@@ -18,13 +18,37 @@
         <li>
           <span>Email :</span><span>{{ user.email }}</span>
         </li>
-        <li><span>პაროლის შეცვლა</span></li>
-        <li><span>ჩემი ჯავშანი :</span><span>(1)</span></li>
+
+        <li>
+          <span>დაჯავშნილია :</span><span>({{ totalCount }}) </span>
+        </li>
       </ul>
+      <section>
+        <div
+          class="edit-user"
+          *ngIf="this.userServiceService.myUser.role === 'admin'"
+        >
+          <a [routerLink]="'/edit-doctor/' + doctorId">
+            <img src="/Icons/edit.svg" alt="" />
+            <span>რედაქტირება</span>
+          </a>
+        </div>
+        <div
+          class="remove-books"
+          *ngIf="this.userServiceService.myUser.role === 'admin'"
+        >
+          <button (click)="removeBookings()">
+            <img src="/Icons/remove-Vector.svg" alt="" />
+            <span>წაშლა</span>
+          </button>
+        </div>
+      </section>
     </div>
   </div>
   <div class="my-booking">
-    <h2>ჩემი ჯავშანი <span>( 2 )</span></h2>
+    <h2>
+      დაჯავშნილია <span>( {{ totalCount }} )</span>
+    </h2>
     <div class="dates">
       <p>{{ thisYear }}</p>
       <p>{{ getMonth }}</p>
@@ -46,7 +70,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="this.userServiceService.myUser.role === 'user'">
         <tr *ngFor="let row of time">
           <td>{{ row }}</td>
           <td *ngFor="let col of weeks">
@@ -54,7 +78,12 @@
               *ngIf="col.week === 'Sat' || col.week == 'Sun'"
               class="block"
             ></div>
-            <div *ngIf="isDayBooked(col.day, row)" class="my-booked">
+            <div
+              *ngIf="isDayBooked(col.day, row) as bookingId"
+              class="my-booked"
+              draggable="true"
+              (dragstart)="drag($event, bookingId)"
+            >
               <img
                 src="Icons/remove.svg"
                 alt=""
@@ -70,6 +99,71 @@
                 col.week !== 'Sun'
               "
               (click)="getTimes(col, row)"
+              (drop)="drop($event, col, row)"
+              (dragover)="allowDrop($event)"
+            ></div>
+            <div
+              class="other-book"
+              *ngIf="
+                col.week !== 'Sat' &&
+                col.week !== 'Sun' &&
+                !isDayBooked(col.day, row) &&
+                isDayOtherBooked(col.day, row)
+              "
+            ></div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="this.userServiceService.myUser.role === 'admin'">
+        <tr *ngFor="let row of time">
+          <td>{{ row }}</td>
+          <td *ngFor="let col of weeks">
+            <div
+              *ngIf="col.week === 'Sat' || col.week == 'Sun'"
+              class="block"
+            ></div>
+            <div
+              *ngIf="isDayOtherBooked(col.day, row) as bookingId"
+              class="my-booked"
+              draggable="true"
+              (dragstart)="AdminDrag($event, bookingId)"
+            >
+              <img
+                src="Icons/remove.svg"
+                alt=""
+                (click)="getDoctorBook(col.day, row)"
+              />
+              <span>დაჯავშნილია</span>
+            </div>
+            <div
+              class="free-times-admin"
+              *ngIf="
+                !isDayOtherBooked(col.day, row) &&
+                col.week !== 'Sat' &&
+                col.week !== 'Sun'
+              "
+              (drop)="AdminDrop($event, col, row)"
+              (dragover)="AdminAllowDrop($event)"
+            ></div>
+          </td>
+        </tr>
+      </tbody>
+      <tbody *ngIf="!this.userServiceService.myUser.id">
+        <tr *ngFor="let row of time">
+          <td>{{ row }}</td>
+          <td *ngFor="let col of weeks">
+            <div
+              *ngIf="col.week === 'Sat' || col.week == 'Sun'"
+              class="block"
+            ></div>
+
+            <div
+              class="free-times"
+              *ngIf="
+                !isDayBooked(col.day, row) &&
+                col.week !== 'Sat' &&
+                col.week !== 'Sun'
+              "
             ></div>
             <div
               class="other-book"
@@ -103,6 +197,17 @@
     <div>
       <p>გსურთ ჯავშნის წაშლა?</p>
     </div>
-    <button (click)="removeBooking()">დიახ</button>
+    <button
+      (click)="removeBooking()"
+      *ngIf="this.userServiceService.myUser.role === 'user'"
+    >
+      დიახ
+    </button>
+    <button
+      (click)="removeBookingByAdmin()"
+      *ngIf="this.userServiceService.myUser.role === 'admin'"
+    >
+      დიახ
+    </button>
   </div>
 </div>

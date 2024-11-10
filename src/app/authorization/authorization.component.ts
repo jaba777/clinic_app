@@ -73,8 +73,8 @@ export class AuthorizationComponent implements OnInit {
   }
 
   SignInFunct() {
-    this.isSpinner = true;
     if (this.signInForm.valid) {
+      this.isSpinner = true;
       this.authService.SignIn(this.signInForm.value).subscribe({
         next: (response) => {
           this.cookieServiceService.setCookie('token', response.token);
