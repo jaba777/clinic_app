@@ -138,12 +138,13 @@ export class ProfileComponent implements OnInit {
       this.bookingServiceService
         .RemoveBook(this.bookId, this.userServiceService.myUser.id)
         .subscribe((item) => {
+          this.removeBookingScreen = false;
           if (item.success === true) {
             this.bookingWeek = this.bookingWeek.filter(
               (item: any) => item.id !== this.bookId
             );
             this.totalCount--;
-            this.removeBookingScreen = false;
+
             this.messageService.add({
               severity: 'success',
               summary: 'Success',
