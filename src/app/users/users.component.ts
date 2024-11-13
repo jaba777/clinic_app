@@ -240,6 +240,7 @@ export class UsersComponent implements OnInit {
             summary: 'Success',
             detail: item.message,
           });
+          this.removeBookingScreen = false;
         },
         error: (err) => {
           this.messageService.add({
@@ -247,6 +248,7 @@ export class UsersComponent implements OnInit {
             summary: 'Error',
             detail: err.error.message,
           });
+          this.removeBookingScreen = false;
         },
       });
     }
