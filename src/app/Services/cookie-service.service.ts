@@ -38,10 +38,10 @@ export class CookieServiceService implements OnInit {
       userId: null,
     };
 
-    this.cookieService.deleteAll();
+    this.cookieService.deleteAll('/');
     this.userServiceService.myUser = {};
     setTimeout(() => {
       this.router.navigate(['/home']);
-    }, 50);
+    }, 100);
   }
 }
