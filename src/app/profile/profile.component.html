@@ -124,7 +124,7 @@
 </div>
 
 <div class="remove-books">
-  <button (click)="removeBookings()">
+  <button (click)="removeBookings()" [disabled]="bookingWeek.length === 0">
     <img src="/Icons/remove-Vector.svg" alt="" />
     <span>წაშლა</span>
   </button>

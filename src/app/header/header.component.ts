@@ -72,9 +72,4 @@ export class HeaderComponent implements OnInit {
     const selectedOption = event.option.value;
     this.myControl.setValue(selectedOption.name);
   }
-
-  // SignOut() {
-  //   this.cookieServiceService.removeCookieAll();
-  //   this.userServiceService.myUser = {};
-  // }
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../Services/authService.service';
 import { LocalService } from '../Services/localService.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,11 +16,13 @@ export class SignUpComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private localService: LocalService
+    private localService: LocalService,
+    private messageService: MessageService
   ) {}
 
   otp: string = '';
   isOtp = false;
+  isSpinner: boolean = false;
 
   ngOnInit(): void {
     this.signUpForm = this.fb.group({
@@ -59,38 +62,69 @@ export class SignUpComponent implements OnInit {
   loading: boolean = false;
 
   signUp() {
-    this.loading = true;
     if (this.isOtp) {
+      this.loading = true;
       return this.authService
         .SignUp({
           email: this.localEmail,
           otp: this.signUpForm.value.otp,
         })
-        .subscribe((response) => {
-          if (response.success == true && response.isRegistered == true) {
-            this.localService.deleteLocalStorage('email');
-            this.localService.deleteLocalStorage('otp');
-            this.isOtp = false;
-            this.result = response?.message;
+        .subscribe({
+          next: (response) => {
+            if (response.success == true && response.isRegistered == true) {
+              this.localService.deleteLocalStorage('email');
+              this.localService.deleteLocalStorage('otp');
+              this.isOtp = false;
+              this.result = response?.message;
+            }
             this.loading = false;
-          }
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: response?.message,
+            });
+          },
+          error: (err) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          },
         });
     } else {
+      this.loading = true;
       return this.authService
         .SignUp({
           ...this.signUpForm.value,
           otp: null,
         })
-        .subscribe((response) => {
-          this.localService.setInStorage(
-            'email',
-            JSON.stringify(response.email)
-          );
-          this.localEmail = response.email;
-          this.localService.setInStorage('otp', JSON.stringify(true));
-          this.isOtp = true;
-          this.result = response?.message;
-          this.loading = false;
+        .subscribe({
+          next: (response) => {
+            this.localService.setInStorage(
+              'email',
+              JSON.stringify(response.email)
+            );
+            this.localEmail = response.email;
+            this.localService.setInStorage('otp', JSON.stringify(true));
+            this.isOtp = true;
+            this.result = response?.message;
+            this.loading = false;
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Success',
+              detail: response?.message,
+            });
+          },
+          error: (err) => {
+            this.loading = false;
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Error',
+              detail: err.error.message,
+            });
+          },
         });
     }
   }

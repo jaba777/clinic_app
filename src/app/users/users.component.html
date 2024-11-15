@@ -37,7 +37,10 @@
           class="remove-books"
           *ngIf="this.userServiceService.myUser.role === 'admin'"
         >
-          <button (click)="removeBookings()">
+          <button
+            (click)="removeBookings()"
+            [disabled]="bookingWeek.length === 0"
+          >
             <img src="/Icons/remove-Vector.svg" alt="" />
             <span>წაშლა</span>
           </button>
@@ -179,6 +182,7 @@
       </tbody>
     </table>
   </div>
+
   <div class="booking-box" *ngIf="bookingScreen">
     <div class="remove">
       <img src="Icons/remove.svg" alt="" (click)="onbookingClick()" />
@@ -211,3 +215,6 @@
     </button>
   </div>
 </div>
+<p *ngIf="!this.myId" style="text-align: center; color: red">
+  ადგილის დასაჯავშნად გაიარეთ აუტორიზაცია
+</p>

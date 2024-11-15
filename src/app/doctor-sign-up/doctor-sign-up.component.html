@@ -1,5 +1,12 @@
 <div class="sign-up">
   <p-toast />
+  <div class="doctor-photo">
+    <img
+      [src]="photoPreview"
+      alt="Selected Photo Preview"
+      *ngIf="photoPreview"
+    />
+  </div>
   <form [formGroup]="signUpForm" (ngSubmit)="signUp()">
     <div>
       <div class="input-box">
