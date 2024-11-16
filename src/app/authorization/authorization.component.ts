@@ -83,7 +83,9 @@ export class AuthorizationComponent implements OnInit {
           this.isSpinner = false;
           this.userServiceService.myUser = response.user;
           this.authScreenService.removeSignScreen();
-          this.router.navigate(['/home']);
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 100);
         },
         error: (err) => {
           this.isSpinner = false;

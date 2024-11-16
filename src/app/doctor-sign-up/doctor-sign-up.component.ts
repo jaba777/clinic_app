@@ -31,6 +31,7 @@ export class DoctorSignUpComponent implements OnInit {
   selectedResume: File | null = null;
 
   myControl = new FormControl('');
+  photoPreview: any = null;
 
   options: any[] = [];
   currentPage = 1;
@@ -108,9 +109,16 @@ export class DoctorSignUpComponent implements OnInit {
   onFileSelected(event: Event, type: 'photo' | 'resume') {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
-      type === 'photo'
-        ? (this.selectedPhoto = file)
-        : (this.selectedResume = file);
+      if (type === 'photo') {
+        this.selectedPhoto = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.photoPreview = e.target?.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.selectedResume = file;
+      }
     }
   }
 

@@ -60,6 +60,8 @@ export class HomeComponent implements OnInit {
 
     this.profession = category.name as string;
     this.categoryIndex = index;
+    this.pageSubject.next(1);
+    this.currentPage = 1;
   }
 
   currentPage = 1;
