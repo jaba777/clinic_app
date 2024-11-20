@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../Services/authService.service';
 import { LocalService } from '../Services/localService.service';
 import { MessageService } from 'primeng/api';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-sign-up',
@@ -12,7 +13,7 @@ import { MessageService } from 'primeng/api';
 export class SignUpComponent implements OnInit {
   signUpForm: any;
   localEmail: any = '';
-
+  socialAuthService = inject(SocialAuthService);
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,

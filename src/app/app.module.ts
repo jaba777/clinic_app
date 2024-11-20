@@ -25,6 +25,13 @@ import { DoctorsModule } from './doctors/doctors.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { EditDoctorModule } from './edit-doctor/edit-doctor.module';
 import { ToastModule } from 'primeng/toast';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+  GoogleLoginProvider,
+  GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { environment } from '../enviroments';
 
 @NgModule({
   declarations: [
@@ -51,11 +58,32 @@ import { ToastModule } from 'primeng/toast';
     ProgressSpinnerModule,
     EditDoctorModule,
     ToastModule,
+    SocialLoginModule,
+    GoogleSigninButtonModule,
   ],
   providers: [
     provideClientHydration(),
     CookieService,
     provideHttpClient(withInterceptors([authorisationInterceptor])),
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        lang: 'en',
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environment.Client_Id, {
+              oneTapEnabled: false,
+              prompt: 'consent',
+            }),
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
   ],
   bootstrap: [AppComponent],
 })

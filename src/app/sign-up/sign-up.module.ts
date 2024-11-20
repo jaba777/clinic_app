@@ -5,6 +5,7 @@ import { SignUpComponent } from './sign-up.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { GoogleSigninButtonModule } from '@abacritt/angularx-social-login';
 
 @NgModule({
   declarations: [SignUpComponent],
@@ -14,6 +15,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
     ReactiveFormsModule,
     ToastModule,
     ProgressSpinnerModule,
+    GoogleSigninButtonModule,
   ],
 })
 export class SignUpModule {}

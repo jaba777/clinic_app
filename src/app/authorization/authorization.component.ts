@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthScreenService } from '../Services/auth-screen.service';
 import { LocalService } from '../Services/localService.service';
@@ -7,6 +7,7 @@ import { CookieServiceService } from '../Services/cookie-service.service';
 import { UserServiceService } from '../Services/user-service.service';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 
 @Component({
   selector: 'app-authorization',
@@ -17,7 +18,7 @@ export class AuthorizationComponent implements OnInit {
   signInForm: any;
   authPage = 1;
   emailVerifyForm: any;
-
+  socialAuthService = inject(SocialAuthService);
   constructor(
     private fb: FormBuilder,
     public authScreenService: AuthScreenService,
@@ -62,6 +63,29 @@ export class AuthorizationComponent implements OnInit {
     if (isSignInLocal) {
       this.authScreenService.isSignin = JSON.parse(isSignInLocal);
     }
+    this.socialAuthService.authState.subscribe({
+      next: (result) => {
+        this.authService.GoogleLogin(result.idToken).subscribe({
+          next: (response) => {
+            this.cookieServiceService.setCookie('token', response.token);
+            this.cookieServiceService.setCookie('userId', response.user.id);
+            this.cookieServiceService.setCookie('role', response.user.role);
+            this.isSpinner = false;
+            this.userServiceService.myUser = response.user;
+            this.authScreenService.removeSignScreen();
+            setTimeout(() => {
+              this.router.navigate(['/home']);
+            }, 100);
+          },
+          error: (err) => {
+            console.log(err);
+          },
+        });
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
   onAuthorizationClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
