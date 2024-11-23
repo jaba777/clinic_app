@@ -47,4 +47,7 @@ export class AuthService {
       password,
     });
   }
+  GoogleLogin(idToken: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/Auth/google-login`, { idToken });
+  }
 }

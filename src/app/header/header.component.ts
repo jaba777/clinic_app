@@ -14,6 +14,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { CategoryServiceService } from '../Services/category-service.service';
 import { CookieServiceService } from '../Services/cookie-service.service';
 import { UserServiceService } from '../Services/user-service.service';
+import { environment } from '../../enviroments';
 
 interface Option {
   id: number;
@@ -32,6 +33,7 @@ export class HeaderComponent implements OnInit {
   isLoading = false;
   page: number = 1;
   filteredOptions!: Observable<Option[]>;
+  environment = environment;
 
   constructor(
     public authScreenService: AuthScreenService,
